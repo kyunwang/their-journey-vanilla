@@ -3,10 +3,16 @@ var winWidth = window.innerWidth;
 var winHeight = window.innerHeight - 120;
 // d3.json('/ne_50m_admin_0_countries_lakes.json', loadMap);
 
+// Data vars
 var refugeeData;
 var timeData;
 var directionMapping = [];
 var countryCenter;
+
+// Animation var
+var transDur = 1000;
+var delayDur = 100;
+
 
 d3.text('../data/to_germany_2014.csv', loadRefugee);
 // d3.text('../data/all_refugees12.csv', loadRefugee);

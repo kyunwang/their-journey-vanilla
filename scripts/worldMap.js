@@ -61,35 +61,61 @@ function loadMap(err, res) {
 		.attr('d', mapPath)
 
 
-	centerPoints()
+	centerPoints();
+	mapTraject()
 
 }
 
 
 function centerPoints(data) {
-	console.log(123);
+	var mapCenter = mapCon.append('g').selectAll('circle')
+		.data(directionMapping)
 
-	mapCon.selectAll('circle')
-		.data(directionMapping).enter()
+	mapCenter.enter()
 		.append('circle')
 		.attr('cx', d => projection(d.coords)[0])
 		.attr('cy', d => projection(d.coords)[1])
 		.attr('r', 5)
 		.attr('fill', '#00CC99')
 		.attr('stroke', '#fff')
+}
 
+function mapTraject() {
+	console.log(123);
 
+	var routeTraject = mapCon.append('g').selectAll('line')
+		.data(refugeeData);
 
-	// 	<circle
-	// 	cx={projection()(coords)[0]}
-	// 	cy={projection()(coords)[1]}
-	// 	// r={city.population / 3000000}
-	// 	r={5}
-	// 	fill="#00CC99"
-	// 	stroke="#FFFFFF"
-	// 	className="marker"
-	// // onClick={() => this.handleMarkerClick(i)}
-	// />
+	routeTraject.enter()
+		.append('line')
+		.attr('x1', d => getCenterX(d.Origin))
+		.attr('y1', d => getCenterY(d.Origin))
+		.attr('x2', d => getCenterX(d.Origin))
+		.attr('y2', d => getCenterY(d.Origin))
+		.attr('stroke', 'red')
+		.attr('stroke-width', 2)
+		.transition()
+		.duration(transDur)
+		// .delay(delayDur)
+		.delay((d, i) => seqDelay(i))
+		.attr('x2', d => getCenterX(d.Destination))
+		.attr('y2', d => getCenterY(d.Destination))
 
+}
 
+/*=================
+=== General functions
+=================*/
+function getCenterX(data) {
+	if (countryCenter[data] === undefined) return;
+	return projection(countryCenter[data])[0]
+}
+
+function getCenterY(data) {
+	if (countryCenter[data] === undefined) return;
+	return projection(countryCenter[data])[1]
+}
+
+function seqDelay(index) {
+	return index * delayDur;
 }
