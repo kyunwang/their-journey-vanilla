@@ -37,10 +37,8 @@ d3.json('data/ne_50m_admin_0_countries_lakes.json', loadMap);
 
 function loadMap(err, res) {
 	if (err) return err;
-	console.log(res);
 
 	var topoPath = topojson.feature(res, res.objects.countries).features;
-
 
 	// Get center of countries and directions
 	topoPath.map(item => {
@@ -61,5 +59,37 @@ function loadMap(err, res) {
 		.append('path')
 		.attr('class', 'country')
 		.attr('d', mapPath)
+
+
+	centerPoints()
+
+}
+
+
+function centerPoints(data) {
+	console.log(123);
+
+	mapCon.selectAll('circle')
+		.data(directionMapping).enter()
+		.append('circle')
+		.attr('cx', d => projection(d.coords)[0])
+		.attr('cy', d => projection(d.coords)[1])
+		.attr('r', 5)
+		.attr('fill', '#00CC99')
+		.attr('stroke', '#fff')
+
+
+
+	// 	<circle
+	// 	cx={projection()(coords)[0]}
+	// 	cy={projection()(coords)[1]}
+	// 	// r={city.population / 3000000}
+	// 	r={5}
+	// 	fill="#00CC99"
+	// 	stroke="#FFFFFF"
+	// 	className="marker"
+	// // onClick={() => this.handleMarkerClick(i)}
+	// />
+
 
 }
