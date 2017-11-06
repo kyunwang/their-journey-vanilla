@@ -105,17 +105,20 @@ function mapTraject() {
 
 async function mapJourney(numb) {
 
+	var journeyRoute = [];
+	var checkpoint;
 
 	// await journeyData.map(data => {
 	journeyData.map(data => {
 		data.journey.map((country, i) => {
 			journeyData[numb].journeyCoords.push(countryCenter[country])
+			journeyRoute.push(countryCenter[country])
 		})
 	})
 
-	var journeyRoute = [journeyData[numb].journeyCoords[0]]
-	var journeyRoute = [journeyData[numb].journeyCoords[0], journeyData[numb].journeyCoords[1]]
-	// var journeyRoute = journeyData[numb].journeyCoords
+	// var journeyRoute = journeyData[numb].journeyCoords;
+	// var journeyRoute = [journeyData[numb].journeyCoords[0]];
+	// var journeyRoute = [journeyData[numb].journeyCoords[0], journeyData[numb].journeyCoords[1]];
 
 	// console.log(countryCenter);
 	// console.log(journeyData[numb].journeyCoords[0]);
@@ -183,72 +186,107 @@ async function mapJourney(numb) {
 	// .ease(d3.easeLinear)
 	// .on('start', tick);
 
+
+
+	// var journeyMap = mapCon.append('g')
+	// // .select('path')
+	// .append('path')
+	// .datum(journeyRoute)
+	// .attr('class', 'journey-line')
+	// .attr('d', pathLine(journeyRoute))
+	// .transition()
+	// .duration(transDur)
+	// // .delay(5000)
+	// .attrTween('stroke-dasharray', function (d) { // Tween from https://www.yerich.net/blog/bezier-curve-animation-using-d3
+	// 	var len = this.getTotalLength();
+	// 	// t =  the duration set
+	// 	return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
+	// });
+
 	var journeyMap = mapCon.append('g')
 		// .select('path')
 		.append('path')
 		.datum(journeyRoute)
 		.attr('class', 'journey-line')
 		.attr('d', pathLine(journeyRoute))
+		// .attr('d', pathLine(journeyData[numb].journeyCoords))
 		.transition()
-		.duration(transDur)
-		// .delay(5000)
-		.attrTween('stroke-dasharray', function (d) { // Tween from https://www.yerich.net/blog/bezier-curve-animation-using-d3
-			var len = this.getTotalLength();
-			// t =  the duration set
-			return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
-		});
-
+		.duration(500)
+		.attrTween('stroke-dasharray', function (d) {
+			var len = journeyMap.node().getTotalLength();
+			return function (t) {
+				checkpoint = len;
+				return (d3.interpolateString('0,' + len, len + ',0'))(t)
+			};
+		})
+		// .ease(d3.easeLinear)
+		.on("start", tick);
 
 
 	// Add function for r
-	d3.select('#plus').on('click', addJourneyRoute)
-	d3.select('#minus').on('click', removeJourneyRoute)
+	function tick() {
+		d3.select('#plus').on('click', addJourneyRoute)
+		d3.select('#minus').on('click', removeJourneyRoute)
 
-	function addJourneyRoute() {
-		console.log('hi add route');
-		let jCoords = journeyData[numb].journeyCoords
 
-		// Checking wether to add route
-		if (journeyRoute.length < jCoords.length) {
-			// Add new route/data
-			journeyRoute.push(jCoords[journeyRoute.length]);
+		function addJourneyRoute() {
+			console.log('hi add route');
+			var jCoords = journeyData[numb].journeyCoords;
+			// console.log(journeyRoute.length, jCoords.length);
 
-			// Updating
-			d3.select(journeyMap.node())
-				.attr('d', pathLine(journeyRoute))
-				.transition()
-				.duration(transDur)
-				.attrTween('stroke-dasharray', function (d) {
-					var len = journeyMap.node().getTotalLength();
-					return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
-				});
-			// Need another check when new data and different data comes in 
+			// Checking wether to add route
+			if (journeyRoute.length < jCoords.length) {
+				// Add new route/data
+				checkpoint = journeyMap.node().getTotalLength();
+				journeyRoute.push(jCoords[journeyRoute.length]);
+				// Updating
+				d3.select(journeyMap.node())
+					.attr('d', pathLine(journeyRoute))
+					.transition()
+					.duration(transDur)
+					// .ease(d3.easeLinear)
+					.attrTween('stroke-dasharray', function (d) {
+						var len = journeyMap.node().getTotalLength();
+						return function (t) {
+							return (d3.interpolateString(`${checkpoint}, ${len}`, `${len}, 0`))(t);
+						};
+					})
+				// .on('start', function () { checkpoint = journeyMap.node().getTotalLength(); })
+				// Need another check when new data and different data comes in 
 
+			}
+		}
+		function removeJourneyRoute() {
+			console.log('bye remove route');
+			var jCoords = journeyData[numb].journeyCoords;
+
+			// Checking wether to add route
+			if (journeyRoute.length > 0) {
+				// Remove route/data
+				checkpoint = journeyMap.node().getTotalLength();
+				journeyRoute.pop();
+				console.log(journeyRoute);
+
+
+				// Updating
+				d3.select(journeyMap.node())
+					.attr('d', pathLine(journeyRoute))
+					.transition()
+					.duration(transDur)
+					// .ease(d3.easeLinear)
+					.attrTween('stroke-dasharray', function (d) {
+						var len = journeyMap.node().getTotalLength();
+						return function (t) {
+							// return (d3.interpolateString(`${len}, ${checkpoint}`, `${len}, 0`))(t);
+							return (d3.interpolateString(`${0}, ${len}`, `${len}, 0`))(t);
+						};
+					})
+				// .on('start', function () { checkpoint = journeyMap.node().getTotalLength(); })
+				// Need another check when new data and different data comes in 
+
+			}
 		}
 	}
-	function removeJourneyRoute() {
-		console.log('bye remove route');
-		let jCoords = journeyData[numb].journeyCoords
-
-		// Checking wether to add route
-		if (journeyRoute.length > 0) {
-			// Add new route/data
-			journeyRoute.pop();
-
-			// Updating
-			d3.select(journeyMap.node())
-				.attr('d', pathLine(journeyRoute))
-				.transition()
-				.duration(transDur)
-				.attrTween('stroke-dasharray', function (d) {
-					var len = journeyMap.node().getTotalLength();
-					return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
-				});
-			// Need another check when new data and different data comes in 
-
-		}
-	}
-
 }
 
 /*=================
