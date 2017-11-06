@@ -1,18 +1,3 @@
-var svgCon = d3.select('#svg-con');
-var winWidth = window.innerWidth;
-var winHeight = window.innerHeight - 120;
-// d3.json('/ne_50m_admin_0_countries_lakes.json', loadMap);
-
-// Data vars
-var refugeeData;
-var timeData;
-var directionMapping = [];
-var countryCenter;
-
-// Animation var
-var transDur = 1000;
-var delayDur = 100;
-
 
 d3.text('../data/to_germany_2014.csv', loadRefugee);
 // d3.text('../data/all_refugees12.csv', loadRefugee);
@@ -25,10 +10,17 @@ d3.text('../data/to_germany_2014.csv', loadRefugee);
 
 // }
 
-function loadRefugee(err, res) {
+async function loadRefugee(err, res) {
 	if (err) return err;
 
-	refugeeData = cleanRefugee(res);
-	cleanTime(refugeeData)
-	// console.log(refugeeData);
+	// Set cleaned global data available
+	refugeeData = await cleanRefugee(res);
+	timeData = await cleanTime(refugeeData)
+
+	// Render the map
+	d3.json('data/ne_50m_admin_0_countries_lakes.json', loadMap);
+
+	// render teh timeline
+	await renderTimeLine();
+
 } 
