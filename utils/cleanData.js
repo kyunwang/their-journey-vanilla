@@ -24,17 +24,27 @@ function cleanRefugee(res) {
 }
 
 function cleanTime(res) {
-	var nested_data = d3.nest()
+	var time = d3.nest()
 		.key(function (d) {
 			return d.Datum;
 		})
 		.rollup(function (d) {
 			return {
+				// origin: d.Origin,
+				// destination: d.Destination,
 				total: d3.sum(d, function (item) {
 					return parseInt(item.Value, 10)
 				})
 			}
 		})
-		.entries(res);
+		.entries(res)
+	// .map(function (d) {
+	// 	console.log(d);
+	// 	return {
+	// 		origin: d.Origin,
+	// 		destination: d.Destination,
+	// 	}
+	// })
+	return time;
 	// console.log(nested_data);
 }

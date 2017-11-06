@@ -17,6 +17,9 @@ body {
 /*=================
 === Svg styling
 =================*/
+/*=================
+=== Country
+=================*/
 .map-con {
   text-align: center;
   margin: var(--def-margin);
@@ -26,6 +29,16 @@ body {
 .country {
   fill: #fff;
   stroke: #007fff;
+  stroke-width: 1.5; }
+
+/*=================
+=== Timeline
+=================*/
+.refugee-line {
+  fill: none;
+  stroke: steelblue;
+  stroke-linejoin: round;
+  stroke-linecap: round;
   stroke-width: 1.5; }
 
 /*# sourceMappingURL=style.css.map */

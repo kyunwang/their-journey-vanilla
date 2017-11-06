@@ -28,6 +28,9 @@
 		// height: 100%;
 		// width: 100%;
 	}
+	/*=================
+	=== Country
+	=================*/
 
 	.map-con {
 		// height: 100%;
@@ -41,5 +44,16 @@
 	.country {
 		fill: #fff;
 		stroke: #007fff;
+		stroke-width: 1.5;
+	}
+	/*=================
+	=== Timeline
+	=================*/
+
+	.refugee-line {
+		fill: none;
+		stroke: steelblue;
+		stroke-linejoin: round;
+		stroke-linecap: round;
 		stroke-width: 1.5;
 	}
