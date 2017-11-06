@@ -25,6 +25,14 @@ body {
 
 
 
+
+
+
+
+
+
+
+
 /*=================
 === Svg styling
 =================*/
@@ -35,6 +43,14 @@ svg {
 	// height: 100%;
 	// width: 100%;
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -57,12 +73,17 @@ svg {
 
 .country {
 	fill: #fff;
-	stroke: #007fff;
+	stroke: rgba(0, 127, 255, .5); // stroke: #007fff;
 	stroke-width: 1.5;
 }
 
 
 
+// 
+.trajectory {
+	stroke: red;
+	stroke-width: 2;
+}
 
 
 
@@ -82,6 +103,14 @@ svg {
 	stroke-linecap: round;
 	stroke-width: 1.5;
 }
+
+
+
+
+
+
+
+
 
 
 

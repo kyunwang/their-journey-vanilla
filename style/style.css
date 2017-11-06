@@ -1,4 +1,4 @@
-	/*=================
+/*=================
 === Vars and settings
 =================*/
 :root {
@@ -28,17 +28,30 @@ body {
 
 .country {
   fill: #fff;
-  stroke: #007fff;
+  stroke: rgba(0, 127, 255, 0.5);
   stroke-width: 1.5; }
+
+.trajectory {
+  stroke: red;
+  stroke-width: 2; }
 
 /*=================
 === Timeline
 =================*/
+.time-con {
+  overflow: hidden; }
+
 .refugee-line {
   fill: none;
   stroke: steelblue;
   stroke-linejoin: round;
   stroke-linecap: round;
   stroke-width: 1.5; }
+
+/*=================
+=== Multi timeline
+=================*/
+.multi-time-con {
+  height: 200px; }
 
 /*# sourceMappingURL=style.css.map */
