@@ -1,4 +1,14 @@
 /*=================
+=== TOC
+
+- Vars and settings
+- Svg styling
+- Worldmap
+- Journey
+- Timeline
+- Multi Timeline
+=================*/
+/*=================
 === Vars and settings
 =================*/
 :root {
@@ -18,7 +28,7 @@ body {
 === Svg styling
 =================*/
 /*=================
-=== Country
+=== Worldmap
 =================*/
 .map-con {
   text-align: center;
@@ -35,6 +45,9 @@ body {
   stroke: red;
   stroke-width: 2; }
 
+/*=================
+=== Journey
+=================*/
 /*=================
 === Timeline
 =================*/

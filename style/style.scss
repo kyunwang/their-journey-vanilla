@@ -1,4 +1,16 @@
 /*=================
+=== TOC
+
+- Vars and settings
+- Svg styling
+- Worldmap
+- Journey
+- Timeline
+- Multi Timeline
+=================*/
+
+
+/*=================
 === Vars and settings
 =================*/
 
@@ -21,18 +33,6 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*=================
 === Svg styling
 =================*/
@@ -47,19 +47,8 @@ svg {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 /*=================
-=== Country
+=== Worldmap
 =================*/
 
 .map-con {
@@ -78,7 +67,6 @@ svg {
 }
 
 
-
 // 
 .trajectory {
 	stroke: red;
@@ -86,6 +74,10 @@ svg {
 }
 
 
+
+/*=================
+=== Journey
+=================*/
 
 
 /*=================
@@ -103,19 +95,6 @@ svg {
 	stroke-linecap: round;
 	stroke-width: 1.5;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
