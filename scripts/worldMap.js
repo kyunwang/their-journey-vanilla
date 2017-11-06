@@ -28,9 +28,9 @@ projection
 	// .center([-100, 40.5])
 	.center([0, la])
 	.rotate([-lo, 0])
-	// .scale(mapWidth * 0.55)
-	.scale(300)
-// .translate([this.props.svgWidth / 2, this.props.svgHeight / 2]);
+	.scale(winWidth * 0.55)
+	// .scale(300)
+	.translate([winWidth / 2.5, winHeight / 2]);
 
 
 
@@ -60,14 +60,16 @@ function loadMap(err, res) {
 		.attr('d', mapPath)
 
 
-	centerPoints();
-	mapTraject()
-
+	// centerPoints();
+	// mapTraject()
+	mapJourney(0);
 }
 
 
 function centerPoints(data) {
-	var mapCenter = mapCon.append('g').selectAll('circle')
+	var mapCenter = mapCon.append('g')
+		.attr('class', 'country-center')
+		.selectAll('circle')
 		.data(directionMapping)
 
 	mapCenter.enter()
@@ -80,17 +82,17 @@ function centerPoints(data) {
 }
 
 function mapTraject() {
-	var routeTraject = mapCon.append('g').selectAll('line')
+	var routeTraject = mapCon.append('g')
+		.selectAll('line')
 		.data(refugeeData);
 
 	routeTraject.enter()
 		.append('line')
+		.attr('class', 'trajectory')
 		.attr('x1', d => getCenterX(d.Origin))
 		.attr('y1', d => getCenterY(d.Origin))
 		.attr('x2', d => getCenterX(d.Origin))
 		.attr('y2', d => getCenterY(d.Origin))
-		.attr('stroke', 'red')
-		.attr('stroke-width', 2)
 		.transition()
 		.duration(transDur)
 		// .delay(delayDur)
@@ -98,6 +100,69 @@ function mapTraject() {
 		.attr('x2', d => getCenterX(d.Destination))
 		.attr('y2', d => getCenterY(d.Destination))
 
+}
+
+
+async function mapJourney(numb) {
+	await journeyData.map(data => {
+		data.journey.map((country, i) => {
+			journeyData[numb].journeyCoords.push(countryCenter[country])
+		})
+	})
+
+
+	// console.log(countryCenter);
+	console.log(journeyData[numb].journeyCoords);
+	// console.log(mapPath(journeyData[numb].journeyCoords));
+	// console.log(mapPath);
+
+
+	var pathLine = d3.line()
+		.x(function (d) { return projection(d)[0]; })
+		.y(function (d) { return projection(d)[1]; })
+		// .curve("curveCardinal")
+		.curve(d3.curveCardinal)
+
+
+	var journeyMap = mapCon.append('g')
+		.selectAll('path')
+		.data(journeyData)
+	// .data(journeyData[numb].journeyCoords)
+
+	// journeyMap.append('path')
+	// .attr('d', pathLine(journeyData[numb].journeyCoords))
+
+	journeyMap.enter()
+		.append('path')
+		// .style('fill', 'none')
+		// .attr('d', mapPath)
+		.attr('d', pathLine(journeyData[numb].journeyCoords))
+		// .attr('d', pathLine(journeyData))
+		.attr('fill', 'none')
+		.attr('stroke', '#000')
+
+
+	// journeyMap
+	// 	.attr('d', d => { console.log(d); mapPath(d) })
+	// 	.attr('x2', d => getCenterX(d.Origin))
+	// .attr('y2', d => getCenterY(d.Origin))
+
+
+
+	// var journeyMap = mapCon.append('g')
+	// 	.selectAll('line')
+	// 	.data(journeyData);
+
+
+	// journeyMap.enter()
+	// 	.append('line')
+	// 	.attr('x1', d => {
+	// 		console.log(d);
+	// 		getCenterX(d)
+	// 	})
+	// 	.attr('y1', d => getCenterY(d))
+	// .attr('x2', d => getCenterX(d.Origin))
+	// .attr('y2', d => getCenterY(d.Origin))
 }
 
 /*=================
