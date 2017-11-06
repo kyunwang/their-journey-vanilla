@@ -33,7 +33,6 @@ projection
 // .translate([this.props.svgWidth / 2, this.props.svgHeight / 2]);
 
 
-d3.json('data/ne_50m_admin_0_countries_lakes.json', loadMap);
 
 function loadMap(err, res) {
 	if (err) return err;
@@ -81,8 +80,6 @@ function centerPoints(data) {
 }
 
 function mapTraject() {
-	console.log(123);
-
 	var routeTraject = mapCon.append('g').selectAll('line')
 		.data(refugeeData);
 
