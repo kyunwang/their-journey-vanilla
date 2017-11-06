@@ -1,63 +1,99 @@
-	/*=================
+/*=================
 === Vars and settings
 =================*/
 
-	:root {
-		--def-margin: 1.5em;
-	}
+:root {
+	--def-margin: 1.5em;
+}
 
 
-	html {
-		font-family: "open sans", "helvetica", "sans-serif";
-		height: 100%;
-	}
+html {
+	font-family: "open sans", "helvetica", "sans-serif";
+	height: 100%;
+}
 
-	body {
-		height: 100%; // background-color: #303030;
-		margin: 0;
-		padding: 0;
-		font-family: sans-serif;
-	}
-	/*=================
-	=== Svg styling
-	=================*/
+body {
+	height: 100%; // background-color: #303030;
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
 
-	svg {
-		// height: 800;
-		// width: 800;
-		// height: 100%;
-		// width: 100%;
-	}
-	/*=================
-	=== Country
-	=================*/
 
-	.map-con {
-		// height: 100%;
-		text-align: center;
-		margin: var(--def-margin);
-		border: 1px solid #000;
-		overflow: hidden;
-		svg {}
-	}
 
-	.country {
-		fill: #fff;
-		stroke: #007fff;
-		stroke-width: 1.5;
-	}
-	/*=================
-	=== Timeline
-	=================*/
 
-	.time-con {
-		overflow: hidden;
-	}
 
-	.refugee-line {
-		fill: none;
-		stroke: steelblue;
-		stroke-linejoin: round;
-		stroke-linecap: round;
-		stroke-width: 1.5;
-	}
+
+
+/*=================
+=== Svg styling
+=================*/
+
+svg {
+	// height: 800;
+	// width: 800;
+	// height: 100%;
+	// width: 100%;
+}
+
+
+
+
+
+
+
+/*=================
+=== Country
+=================*/
+
+.map-con {
+	// height: 100%;
+	text-align: center;
+	margin: var(--def-margin);
+	border: 1px solid #000;
+	overflow: hidden;
+	svg {}
+}
+
+.country {
+	fill: #fff;
+	stroke: #007fff;
+	stroke-width: 1.5;
+}
+
+
+
+
+
+
+
+/*=================
+=== Timeline
+=================*/
+
+.time-con {
+	overflow: hidden;
+}
+
+.refugee-line {
+	fill: none;
+	stroke: steelblue;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+	stroke-width: 1.5;
+}
+
+
+
+
+
+
+
+
+/*=================
+=== Multi timeline
+=================*/
+
+.multi-time-con {
+	height: 200px;
+}
