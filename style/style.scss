@@ -12,6 +12,9 @@
 
 /*=================
 === Vars and settings
+Using css vars in scss xd
+
+Mainly using scss for nesting here. Trying my hand in css vars
 =================*/
 
 :root {
@@ -33,6 +36,14 @@ body {
 
 
 
+
+
+
+
+
+
+
+
 /*=================
 === Svg styling
 =================*/
@@ -43,6 +54,9 @@ svg {
 	// height: 100%;
 	// width: 100%;
 }
+
+
+
 
 
 
@@ -75,9 +89,19 @@ svg {
 
 
 
+
+
 /*=================
 === Journey
 =================*/
+
+.journey-line {
+	fill: none;
+	stroke: red;
+	stroke-width: 2;
+}
+
+
 
 
 /*=================
@@ -95,6 +119,14 @@ svg {
 	stroke-linecap: round;
 	stroke-width: 1.5;
 }
+
+
+
+
+
+
+
+
 
 
 

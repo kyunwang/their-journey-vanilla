@@ -10,6 +10,9 @@
 =================*/
 /*=================
 === Vars and settings
+Using css vars in scss xd
+
+Mainly using scss for nesting here. Trying my hand in css vars
 =================*/
 :root {
   --def-margin: 1.5em; }
@@ -48,6 +51,11 @@ body {
 /*=================
 === Journey
 =================*/
+.journey-line {
+  fill: none;
+  stroke: red;
+  stroke-width: 2; }
+
 /*=================
 === Timeline
 =================*/

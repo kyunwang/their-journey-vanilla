@@ -104,15 +104,21 @@ function mapTraject() {
 
 
 async function mapJourney(numb) {
-	await journeyData.map(data => {
+
+
+	// await journeyData.map(data => {
+	journeyData.map(data => {
 		data.journey.map((country, i) => {
 			journeyData[numb].journeyCoords.push(countryCenter[country])
 		})
 	})
 
+	var journeyRoute = [journeyData[numb].journeyCoords[0]]
+	var journeyRoute = [journeyData[numb].journeyCoords[0], journeyData[numb].journeyCoords[1]]
+	// var journeyRoute = journeyData[numb].journeyCoords
 
 	// console.log(countryCenter);
-	console.log(journeyData[numb].journeyCoords);
+	// console.log(journeyData[numb].journeyCoords[0]);
 	// console.log(mapPath(journeyData[numb].journeyCoords));
 	// console.log(mapPath);
 
@@ -120,49 +126,129 @@ async function mapJourney(numb) {
 	var pathLine = d3.line()
 		.x(function (d) { return projection(d)[0]; })
 		.y(function (d) { return projection(d)[1]; })
-		// .curve("curveCardinal")
 		.curve(d3.curveCardinal)
 
 
-	var journeyMap = mapCon.append('g')
-		.selectAll('path')
-		.data(journeyData)
-	// .data(journeyData[numb].journeyCoords)
-
-	// journeyMap.append('path')
-	// .attr('d', pathLine(journeyData[numb].journeyCoords))
-
-	journeyMap.enter()
-		.append('path')
-		// .style('fill', 'none')
-		// .attr('d', mapPath)
-		.attr('d', pathLine(journeyData[numb].journeyCoords))
-		// .attr('d', pathLine(journeyData))
-		.attr('fill', 'none')
-		.attr('stroke', '#000')
-
-
-	// journeyMap
-	// 	.attr('d', d => { console.log(d); mapPath(d) })
-	// 	.attr('x2', d => getCenterX(d.Origin))
-	// .attr('y2', d => getCenterY(d.Origin))
-
-
-
 	// var journeyMap = mapCon.append('g')
-	// 	.selectAll('line')
-	// 	.data(journeyData);
+	// 	.select('path')
+	// 	// .selectAll('path')
+	// 	// .data(journeyRoute)
+	// 	.datum(journeyRoute)
+	// // .data(journeyData)
 
+
+	// console.log(pathLine([journeyData[numb].journeyCoords[0]]));
+	// console.log(pathLine(journeyRoute));
 
 	// journeyMap.enter()
-	// 	.append('line')
-	// 	.attr('x1', d => {
-	// 		console.log(d);
-	// 		getCenterX(d)
-	// 	})
-	// 	.attr('y1', d => getCenterY(d))
-	// .attr('x2', d => getCenterX(d.Origin))
-	// .attr('y2', d => getCenterY(d.Origin))
+	// 	.append('path')
+	// 	.attr('class', 'journey-line')
+	// 	// .attr('d', pathLine([journeyData[numb].journeyCoords[0], journeyData[numb].journeyCoords[1]]))
+	// 	// .attr('d', pathLine(journeyData[numb].journeyCoords))
+	// 	.attr('d', pathLine(journeyRoute))
+	// 	.transition()
+	// 	.duration(transDur)
+	// 	// .delay(5000)
+	// 	.attrTween('stroke-dasharray', function (d) {
+	// 		console.log(d, this);
+	// 		var len = this.getTotalLength();
+	// 		// var len = journeyMap.node().getTotalLength();
+
+	// 		console.log(len);
+	// 		// console.log(this[0]);
+	// 		// t =  the duration set
+	// 		return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
+	// 	});
+
+	// journeyMap
+	// 	// .attr('d', pathLine(journeyData[numb].journeyCoords))
+	// 	// .attr('d', pathLine(journeyRoute))
+	// 	.attr('d', d => { console.log(d); return pathLine(journeyRoute) })
+	// 	.transition()
+	// 	.duration(transDur)
+	// 	// .delay(5000)
+	// 	.attrTween('stroke-dasharray', function () {
+	// 		// var len = this.getTotalLength();
+	// 		var len = this.node().getTotalLength();
+	// 		console.log(len);
+	// 		// t =  the duration set
+	// 		return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
+	// 	});
+
+	// .append('path')
+	// .datum(data)
+	// .attr('class', 'line')
+	// .transition()
+	// .duration(500)
+	// .ease(d3.easeLinear)
+	// .on('start', tick);
+
+	var journeyMap = mapCon.append('g')
+		// .select('path')
+		.append('path')
+		.datum(journeyRoute)
+		.attr('class', 'journey-line')
+		.attr('d', pathLine(journeyRoute))
+		.transition()
+		.duration(transDur)
+		// .delay(5000)
+		.attrTween('stroke-dasharray', function (d) { // Tween from https://www.yerich.net/blog/bezier-curve-animation-using-d3
+			var len = this.getTotalLength();
+			// t =  the duration set
+			return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
+		});
+
+
+
+	// Add function for r
+	d3.select('#plus').on('click', addJourneyRoute)
+	d3.select('#minus').on('click', removeJourneyRoute)
+
+	function addJourneyRoute() {
+		console.log('hi add route');
+		let jCoords = journeyData[numb].journeyCoords
+
+		// Checking wether to add route
+		if (journeyRoute.length < jCoords.length) {
+			// Add new route/data
+			journeyRoute.push(jCoords[journeyRoute.length]);
+
+			// Updating
+			d3.select(journeyMap.node())
+				.attr('d', pathLine(journeyRoute))
+				.transition()
+				.duration(transDur)
+				.attrTween('stroke-dasharray', function (d) {
+					var len = journeyMap.node().getTotalLength();
+					return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
+				});
+			// Need another check when new data and different data comes in 
+
+		}
+	}
+	function removeJourneyRoute() {
+		console.log('bye remove route');
+		let jCoords = journeyData[numb].journeyCoords
+
+		// Checking wether to add route
+		if (journeyRoute.length > 0) {
+			// Add new route/data
+			journeyRoute.pop();
+
+			// Updating
+			d3.select(journeyMap.node())
+				.attr('d', pathLine(journeyRoute))
+				.transition()
+				.duration(transDur)
+				.attrTween('stroke-dasharray', function (d) {
+					var len = journeyMap.node().getTotalLength();
+					return function (t) { return (d3.interpolateString('0,' + len, len + ',0'))(t) };
+				});
+			// Need another check when new data and different data comes in 
+
+		}
+	}
+
 }
 
 /*=================
