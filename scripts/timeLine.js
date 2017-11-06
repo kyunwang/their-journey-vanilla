@@ -63,7 +63,6 @@ function renderTimeLine() {
 
 // Parse the time
 function parseT(d) {
-	console.log(d);
 	d = parseTime(`${d} 12:00pm`);
 	return d;
 }

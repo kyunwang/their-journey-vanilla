@@ -5,6 +5,7 @@ function cleanRefugee(res) {
 	res = res.slice(header);
 
 	const allData = d3.csvParseRows(res, map);
+	allData.sort(sortByDateAscending);
 	return allData;
 
 	function map(d, i) {
@@ -48,12 +49,16 @@ function cleanTime(res) {
 	// 	}
 	// })
 
-	time = time.sort(sortByDateAscending);
+	time = time.sort(sortByDateAscending2);
 	return time;
 }
 
 // Sorting date
 // https://stackoverflow.com/questions/26067081/date-sorting-with-d3-js
 function sortByDateAscending(a, b) {
+	return parseTime(`${a.Datum} 12:00pm`) - parseTime(`${b.Datum} 12:00pm`);
+}
+// I know it is awfull but time constrains
+function sortByDateAscending2(a, b) {
 	return parseTime(`${a.key} 12:00pm`) - parseTime(`${b.key} 12:00pm`);
 }

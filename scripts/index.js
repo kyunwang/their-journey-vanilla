@@ -10,7 +10,7 @@ async function loadRefugee(err, res) {
 	timeData = await cleanTime(refugeeData)
 
 	// Render the map
-	// d3.json('data/ne_50m_admin_0_countries_lakes.json', loadMap);
+	d3.json('data/ne_50m_admin_0_countries_lakes.json', loadMap);
 
 	// render teh timeline
 	await renderTimeLine();
