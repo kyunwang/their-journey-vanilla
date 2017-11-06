@@ -1,14 +1,6 @@
-
 d3.text('../data/to_germany_2014.csv', loadRefugee);
 // d3.text('../data/all_refugees12.csv', loadRefugee);
 // d3.text('../data/all_refugees12-17.csv', loadRefugee);
-// d3.json('/asylum.csv', loadRefugee);
-
-
-// function loadMap(err, res) {
-// 	if (err) return err;
-
-// }
 
 async function loadRefugee(err, res) {
 	if (err) return err;
@@ -18,7 +10,7 @@ async function loadRefugee(err, res) {
 	timeData = await cleanTime(refugeeData)
 
 	// Render the map
-	d3.json('data/ne_50m_admin_0_countries_lakes.json', loadMap);
+	// d3.json('data/ne_50m_admin_0_countries_lakes.json', loadMap);
 
 	// render teh timeline
 	await renderTimeLine();

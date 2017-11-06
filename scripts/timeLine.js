@@ -17,12 +17,14 @@ var timeY = d3.scaleLinear().range([200, 0]);
 // var timeZ = d3.scaleOrdinal(d3.schemeCategory10);
 
 var myLine = d3.line()
-	.curve(d3.curveBasis)
+	// .curve(d3.curveBasis)
 	.x(function (d) { return timeX(parseT(d.key)) })
 	.y(function (d) { return timeY(d.value.total); });
 
 
-var parseTime = d3.timeParse('%Y/%m');
+// parsetime from: http://learnjsdata.com/time.html
+var parseTime = d3.timeParse('%Y/%m %I:%M%p');
+
 
 function renderTimeLine() {
 
@@ -46,12 +48,22 @@ function renderTimeLine() {
 		.attr('d', myLine);
 
 
+	// to chagne
+	refugeeLine.append('g')
+		.attr('transform', 'translate(0,' + 150 + ')')
+		.call(d3.axisBottom(timeX))
+		.select('.domain')
+		.remove();
+
 }
 
 /*=================
 === General functions
 =================*/
+
+// Parse the time
 function parseT(d) {
-	d = parseTime(d);
+	console.log(d);
+	d = parseTime(`${d} 12:00pm`);
 	return d;
 }

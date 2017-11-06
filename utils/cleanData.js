@@ -23,11 +23,13 @@ function cleanRefugee(res) {
 	}
 }
 
+
+var parseTime = d3.timeParse('%Y/%m %I:%M%p');
+
 function cleanTime(res) {
+	// Nesting doc: http://bl.ocks.org/phoebebright/raw/3176159/
 	var time = d3.nest()
-		.key(function (d) {
-			return d.Datum;
-		})
+		.key(function (d) { return d.Datum; })
 		.rollup(function (d) {
 			return {
 				// origin: d.Origin,
@@ -45,6 +47,13 @@ function cleanTime(res) {
 	// 		destination: d.Destination,
 	// 	}
 	// })
+
+	time = time.sort(sortByDateAscending);
 	return time;
-	// console.log(nested_data);
+}
+
+// Sorting date
+// https://stackoverflow.com/questions/26067081/date-sorting-with-d3-js
+function sortByDateAscending(a, b) {
+	return parseTime(`${a.key} 12:00pm`) - parseTime(`${b.key} 12:00pm`);
 }
