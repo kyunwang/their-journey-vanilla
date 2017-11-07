@@ -33,7 +33,6 @@ projection
 	.translate([winWidth / 2.5, winHeight / 2]);
 
 
-
 function loadMap(err, res) {
 	if (err) return err;
 
