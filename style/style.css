@@ -40,7 +40,7 @@ body {
 .country {
   fill: #fff;
   stroke: rgba(0, 127, 255, 0.5);
-  stroke-width: 1.5; }
+  stroke-width: 2.5; }
 
 .trajectory {
   stroke: red;
@@ -60,6 +60,8 @@ body {
 .time-con {
   overflow: hidden;
   background: rgba(0, 0, 0, 0.4); }
+  .time-con p {
+    position: absolute; }
 
 .timeline {
   padding: 1em 0; }

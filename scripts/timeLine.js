@@ -4,7 +4,7 @@
 === The vars
 =================*/
 var timeWidth = winWidth - 200;
-var timeHeight = 250;
+var timeHeight = 150;
 
 var timeCon = d3.select('#svg-time');
 var timeLine = timeCon
@@ -16,7 +16,7 @@ var timeLine = timeCon
 // .append('g')
 
 var timeX = d3.scaleTime().range([0, timeWidth]);
-var timeY = d3.scaleLinear().range([200, 0]);
+var timeY = d3.scaleLinear().range([timeHeight - 20, 0]);
 // var timeZ = d3.scaleOrdinal(['#feca2f', '#2ffe63', '#2f63fe', '#fe2fca']);
 var timeZ = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -56,7 +56,7 @@ function renderTimeLine() {
 
 	// to chagne
 	refugeeLine.append('g')
-		.attr('transform', 'translate(0, 220)')
+		.attr('transform', `translate(0, ${timeHeight})`)
 		.call(d3.axisBottom(timeX))
 		.select('.domain')
 		.remove();
