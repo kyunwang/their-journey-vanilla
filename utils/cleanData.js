@@ -6,6 +6,7 @@ function cleanRefugee(res) {
 
 	const allData = d3.csvParseRows(res, map);
 	allData.sort(sortByDateAscending);
+	console.log(allData);
 	return allData;
 
 	function map(d, i) {
@@ -13,17 +14,28 @@ function cleanRefugee(res) {
 			keys = d;
 			return;
 		}
+
+		if (d[0] == d[1]) return; // It seems some orgin and destination are the same for some reason
+
+		if (toIgnore.includes(d[0]) || toIgnore.includes(d[1])) {
+			// console.log('incLUDES');
+			return;
+		}
+
+		// console.log('origin', d[1]);
+
 		return {
 			Datum: moment(`${d[2]}/${moment().month(d[3]).format('M')}`).format('YYYY/MM'),
-			Destination: d[0],
-			[keys[1]]: d[1],
+			Destination: getName(d[0]),
+			[keys[1]]: getName(d[1]),
+			// Destination: d[0],
+			// [keys[1]]: d[1],
 			[keys[2]]: d[2],
 			[keys[3]]: moment().month(d[3]).format('M'), // From string to number(string)
 			[keys[4]]: d[4],
 		};
 	}
 }
-
 
 var parseTime = d3.timeParse('%Y/%m %I:%M%p');
 
