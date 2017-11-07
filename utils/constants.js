@@ -14,4 +14,5 @@ var journeyData;
 
 // Animation var
 var transDur = 1000;
+var transDurShort = transDur / 2;
 var delayDur = 100;

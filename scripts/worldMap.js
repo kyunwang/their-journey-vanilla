@@ -45,25 +45,25 @@ function loadMap(err, res) {
 
 		directionMapping = [
 			...directionMapping,
-			{ name: item.properties.ADMIN, coords: d3.geoCentroid(item) }
+			{ name: item.properties.NAME, coords: d3.geoCentroid(item) }
 		]
 		countryCenter = {
 			...countryCenter,
-			[item.properties.ADMIN]: d3.geoCentroid(item)
+			[item.properties.NAME]: d3.geoCentroid(item)
 		}
 
 
 		// Quick fix for center of France (prototype)
-		if (item.properties.ADMIN === 'France') {
+		if (item.properties.NAME === 'France') {
 			var frCoords = [2.449486512892406, 46.62237366531258];
 
 			directionMapping = [
 				...directionMapping,
-				{ name: item.properties.ADMIN, coords: frCoords }
+				{ name: item.properties.NAME, coords: frCoords }
 			]
 			countryCenter = {
 				...countryCenter,
-				[item.properties.ADMIN]: frCoords
+				[item.properties.NAME]: frCoords
 			}
 		}
 	})
@@ -77,7 +77,7 @@ function loadMap(err, res) {
 		.attr('d', mapPath)
 
 
-	centerPoints();
+	// centerPoints();
 	// mapTraject();
 	mapJourney(0);
 }
@@ -86,11 +86,13 @@ function loadMap(err, res) {
 function centerPoints(data) {
 	var mapCenter = mapCon.append('g')
 		.attr('class', 'country-center')
-		.selectAll('circle')
+		// .selectAll('circle')
+		.selectAll('.c-cirlce')
 		.data(directionMapping)
 
 	mapCenter.enter()
 		.append('circle')
+		.attr('class', 'c-center')
 		.attr('cx', d => projection(d.coords)[0])
 		.attr('cy', d => projection(d.coords)[1])
 		.attr('r', 5)
@@ -129,16 +131,12 @@ async function mapJourney(numb) {
 	journeyData.map(data => {
 		data.journey.map((country, i) => {
 			journeyData[numb].journeyCoords.push(countryCenter[country]);
-			journeyRoute.push(countryCenter[country]);
+			// journeyRoute.push(countryCenter[country]);
 			// console.log(country);
 		})
 	})
 
-	// var journeyRoute = journeyData[numb].journeyCoords;
-	// var journeyRoute = [journeyData[numb].journeyCoords[0]];
 	// journeyRoute.push(journeyData[numb].journeyCoords[0]);
-	// var journeyRoute = [journeyData[numb].journeyCoords[0], journeyData[numb].journeyCoords[1]];
-
 	// console.log(journeyRoute);
 
 	var pathLine = d3.line()
@@ -155,75 +153,116 @@ async function mapJourney(numb) {
 		.attr('d', pathLine(journeyRoute))
 		// .attr('d', pathLine(journeyData[numb].journeyCoords))
 		.transition()
-		.duration(500)
+		.duration(transDur)
 		.attrTween('stroke-dasharray', function (d) { // Tween source: https://www.yerich.net/blog/bezier-curve-animation-using-d3
 			var len = journeyMap.node().getTotalLength();
 			return function (t) {
 				checkpoint = len;
-				return (d3.interpolateString('0,' + len, len + ',0'))(t)
+				return (d3.interpolateString(`0, ${len}`, `${len}, 0`))(t);
 			};
 		})
-		.on('start', handleJourney); // When journeymap ready execute handleJourney
 
 
-	// Add function for r
-	function handleJourney() {
-		d3.select('#plus').on('click', addJourneyRoute)
-		d3.select('#minus').on('click', removeJourneyRoute)
+	// Add function for handleing the advent of the journey
+	// function handleJourney() {
+	d3.select('#plus').on('click', addJourneyRoute)
+	d3.select('#minus').on('click', removeJourneyRoute)
 
 
-		function addJourneyRoute() {
-			var jCoords = journeyData[numb].journeyCoords;
 
-			// Checking wether to add route
-			if (journeyRoute.length < jCoords.length) {
-				// Get safe the current length 
-				checkpoint = journeyMap.node().getTotalLength();
+	var journeyDestinations = mapCon.append('g')
+		.attr('class', 'spots-con')
+	// .selectAll('.me')
+	// .data(journeyRoute)
 
-				// Add new route/data
-				journeyRoute.push(jCoords[journeyRoute.length]);
 
-				// Updating
-				d3.select(journeyMap.node())
-					.attr('d', pathLine(journeyRoute))
-					.transition()
-					.duration(transDur)
-					.attrTween('stroke-dasharray', function (d) {
-						var len = journeyMap.node().getTotalLength();
-						return function (t) {
-							return (d3.interpolateString(`${checkpoint}, ${len}`, `${len}, 0`))(t);
-						};
-					})
-				// Need another check when new data and different data comes in 
+	// Update the journey spots/stops
+	function updateHotspot() {
+		var updateJourney = mapCon.selectAll('.me').data(journeyRoute)
 
-			}
-		}
-		function removeJourneyRoute() {
-			var jCoords = journeyData[numb].journeyCoords;
+		updateJourney
+			.enter()
+			.append('circle')
+			.attr('class', 'me')
+			.attr('r', 0)
+			.attr('cx', d => { return projection(d)[0] })
+			.attr('cy', d => projection(d)[1])
+			.transition()
+			.duration(transDur)
+			.attr('r', 10)
+			.attr('cx', d => { return projection(d)[0] })
+			.attr('cy', d => projection(d)[1])
+			.attr('fill', 'blue');
 
-			// Checking wether to remove route
-			if (journeyRoute.length > 0) {
-				// Save current length
-				checkpoint = journeyMap.node().getTotalLength();
+		// updateJourney.transition()
+		// updateJourney
+		// 	.attr('fill', 'yellow');
 
-				// Remove route/data
-				journeyRoute.pop();
+		updateJourney.exit()
+			.transition()
+			.duration(transDurShort)
+			.attr('r', 0)
+			.remove();
+	}
 
-				// Updating
-				d3.select(journeyMap.node())
-					.attr('d', pathLine(journeyRoute))
-					.transition()
-					.duration(transDur)
-					.attrTween('stroke-dasharray', function (d) {
-						var len = journeyMap.node().getTotalLength();
-						return function (t) {
-							return (d3.interpolateString(`${0}, ${len}`, `${len}, 0`))(t);
-						};
-					});
 
-			}
+	function addJourneyRoute() {
+		var jCoords = journeyData[numb].journeyCoords;
+
+		// Checking wether to add route
+		if (journeyRoute.length < jCoords.length) {
+			// Get safe the current length 
+			checkpoint = journeyMap.node().getTotalLength();
+
+			// Add new route/data
+			journeyRoute.push(jCoords[journeyRoute.length]);
+
+			// Updating
+			d3.select(journeyMap.node())
+				.attr('d', pathLine(journeyRoute))
+				.transition()
+				.duration(transDur)
+				.attrTween('stroke-dasharray', function (d) {
+					var len = journeyMap.node().getTotalLength();
+					return function (t) {
+						return (d3.interpolateString(`${checkpoint}, ${len}`, `${len}, 0`))(t);
+					};
+				})
+			updateHotspot();
+
+
+			// Need another check when new data and different data comes in 
+
 		}
 	}
+
+	function removeJourneyRoute() {
+		var jCoords = journeyData[numb].journeyCoords;
+
+		// Checking wether to remove route
+		if (journeyRoute.length > 0) {
+			// Save current length
+			checkpoint = journeyMap.node().getTotalLength();
+
+			// Remove route/data
+			journeyRoute.pop();
+
+			// Updating
+			d3.select(journeyMap.node())
+				.attr('d', pathLine(journeyRoute))
+				.transition()
+				.duration(transDur)
+				.attrTween('stroke-dasharray', function (d) {
+					var len = journeyMap.node().getTotalLength();
+					return function (t) {
+						return (d3.interpolateString(`${0}, ${len}`, `${len}, 0`))(t);
+					};
+				});
+			updateHotspot();
+		}
+	}
+
+
 }
 
 /*=================
