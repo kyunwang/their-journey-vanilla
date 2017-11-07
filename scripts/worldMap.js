@@ -28,9 +28,10 @@ projection
 	// .center([-100, 40.5])
 	.center([0, la])
 	.rotate([-lo, 0])
-	.scale(winWidth * 0.55)
-	// .scale(300)
-	.translate([winWidth / 2.5, winHeight / 2]);
+	// .scale(winWidth * 0.55)
+	.scale(250)
+	.translate([winWidth / 2.5, winHeight / 1.1])
+	// .translate([winWidth / 2.5, winHeight / 2]);
 
 
 function loadMap(err, res) {
@@ -40,8 +41,6 @@ function loadMap(err, res) {
 
 	// Get center of countries and directions
 	topoPath.map(item => {
-
-
 		directionMapping = [
 			...directionMapping,
 			{ name: item.properties.NAME, coords: d3.geoCentroid(item) }
@@ -53,16 +52,16 @@ function loadMap(err, res) {
 
 
 		// Quick fix for center of France (prototype)
-		if (item.properties.NAME === 'France') {
-			var frCoords = [2.449486512892406, 46.62237366531258];
+		if (correctCenter[item.properties.ADM0_A3]) {
+			var adm0 = correctCenter[item.properties.ADM0_A3]
 
 			directionMapping = [
 				...directionMapping,
-				{ name: item.properties.NAME, coords: frCoords }
+				{ name: item.properties.NAME, coords: adm0 }
 			]
 			countryCenter = {
 				...countryCenter,
-				[item.properties.NAME]: frCoords
+				[item.properties.NAME]: adm0
 			}
 		}
 	})
@@ -72,13 +71,16 @@ function loadMap(err, res) {
 		.data(topoPath)
 		.enter()
 		.append('path')
-		.attr('class', 'country')
+		.attr('class', d => {
+			return `${d.properties.NAME} country`
+		})
 		.attr('d', mapPath)
+		// .on('mouseenter', (d) => {console.log(d.properties.NAME);})
 
 
 	// centerPoints();
 	// mapTraject();
-	mapJourney(0);
+	// mapJourney(0);
 }
 
 
@@ -99,24 +101,77 @@ function centerPoints(data) {
 		.attr('stroke', '#fff')
 }
 
-function mapTraject() {
+function mapTraject(date) {
+	// Filter the data
+	var filterData = date !== 'all' ? refugeeData.filter(d => d.Datum === date) : refugeeData;
+
+	console.log(filterData)
+
+	var totalValue = filterData.reduce((a, b) => {
+		a = a.Value ? a.Value : a;
+		return (setNumber(a) + setNumber(b.Value));
+	});
+
+	console.log(totalValue);
+
+
+
+	var testtotal = d3.nest()
+	.key(d => d.Destination)
+	.entries(filterData)
+	console.log(testtotal);
+
+
+
 	var routeTraject = mapCon.append('g')
+		.attr('class', 'traject-con')
 		.selectAll('line')
-		.data(refugeeData);
+		// .data(refugeeData)
+		.data(filterData);
 
 	routeTraject.enter()
 		.append('line')
 		.attr('class', 'trajectory')
+		// Assign starting point
 		.attr('x1', d => getCenterX(d.Origin))
 		.attr('y1', d => getCenterY(d.Origin))
 		.attr('x2', d => getCenterX(d.Origin))
 		.attr('y2', d => getCenterY(d.Origin))
 		.transition()
-		.duration(transDur)
-		// .delay(delayDur)
-		.delay((d, i) => seqDelay(i))
+		.duration(transDurShort)
+		.delay((d, i) => seqDelayShort(i))
+		// Transition to desitnation
 		.attr('x2', d => getCenterX(d.Destination))
 		.attr('y2', d => getCenterY(d.Destination))
+		.transition()
+		.duration(transDurShort)
+		// End line at desitnation
+		.attr('x1', d => getCenterX(d.Destination))
+		.attr('y1', d => getCenterY(d.Destination))
+
+		var routeBar = mapCon.append('g')
+			.attr('class', 'refbar-con')
+			.selectAll('rect')
+			.data(filterData)
+
+
+
+		routeBar.enter()
+			.append('rect')
+			.attr('fill', 'red')
+			.attr('x', d => getCenterX(d.Destination) - 5)
+			.attr('y', d => getCenterY(d.Destination))
+			.attr('height', 0)
+			.attr('width', 10)
+			.transition()
+			.duration(transDur)
+			.delay((d, i) => seqDelayShort(i))
+			.attr('height', d => refbarHeight(d.Value))
+			.attr('y', function(d) {
+				// console.log(d.Destination);
+				return getCenterY(d.Destination) - refbarHeight(d.Value);
+			})
+
 
 }
 
@@ -146,6 +201,7 @@ async function mapJourney(numb) {
 
 
 	var journeyMap = mapCon.append('g')
+		.attr('class', 'journey-con')
 		.append('path')
 		.datum(journeyRoute)
 		.attr('class', 'journey-line')
@@ -163,7 +219,6 @@ async function mapJourney(numb) {
 
 
 	// Add function for handleing the advent of the journey
-	// function handleJourney() {
 	d3.select('#plus').on('click', addJourneyRoute)
 	d3.select('#minus').on('click', removeJourneyRoute)
 
@@ -269,14 +324,26 @@ async function mapJourney(numb) {
 =================*/
 function getCenterX(data) {
 	if (countryCenter[data] === undefined) return;
-	return projection(countryCenter[data])[0]
+	return projection(countryCenter[data])[0];
 }
 
 function getCenterY(data) {
 	if (countryCenter[data] === undefined) return;
-	return projection(countryCenter[data])[1]
+	return projection(countryCenter[data])[1];
 }
 
 function seqDelay(index) {
-	return index * delayDur;
+	return delayDur * index;
 }
+
+function seqDelayShort(index) {
+	return delayDurShort * index;
+}
+
+function setNumber(numb) {
+	return parseInt(numb, 10);
+}
+
+function refbarHeight(numb) {
+	return numb / 20;
+} 

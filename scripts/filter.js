@@ -9,6 +9,8 @@ function renderFilter() {
 	// Remove duplicates
 	filterKeys = filterKeys.filter((d, i, self) => i === self.indexOf(d));
 
+	filterKeys.unshift('all')
+
 
 	d3.select('#filter-list')
 		.on('change', changeDate)
@@ -25,5 +27,9 @@ function renderFilter() {
 	function changeDate() {
 		console.log(this.value);
 		console.log('yeee');
+
+		// console.log(mapTraject);
+		mapTraject(this.value);
+
 	}
 }
