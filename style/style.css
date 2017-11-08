@@ -54,6 +54,19 @@ body {
   stroke: red;
   stroke-width: 2; }
 
+.journey-detail {
+  flex: 1;
+  margin: 0.8em 0;
+  border: 1px solid gold;
+  border-radius: 2px;
+  padding: 1em;
+  background-color: #3a3a3a;
+  color: #fff; }
+  .journey-detail p {
+    margin-bottom: 0.3em; }
+  .journey-detail span {
+    font-weight: 300; }
+
 /*=================
 === Timeline
 =================*/
@@ -79,6 +92,9 @@ body {
 .multi-time-con {
   height: 200px; }
 
+/*=================
+=== Stuff to check
+=================*/
 .line {
   fill: none;
   stroke: steelblue;
@@ -96,6 +112,9 @@ body {
   color: 'blue';
   fill: "blue"; }
 
+/*=================
+=== Loader
+=================*/
 #loader {
   display: none;
   align-items: center;
@@ -108,18 +127,5 @@ body {
   #loader p {
     text-align: center;
     font-size: 2em; }
-
-.location-detail {
-  flex: 1;
-  margin: 0.8em 0;
-  border: 1px solid gold;
-  border-radius: 2px;
-  padding: 1em;
-  background-color: #3a3a3a;
-  color: #fff; }
-  .location-detail p {
-    margin-bottom: 0.3em; }
-  .location-detail span {
-    font-weight: 300; }
 
 /*# sourceMappingURL=style.css.map */
