@@ -15,6 +15,7 @@ var world = mapCon
 	.attr('class', 'world');
 
 // To enable plotting with coordinates
+// To center the map to a certain degree
 var lo = 26.2206322; // x
 var la = 46.0485818; // y
 
@@ -31,6 +32,10 @@ projection
 	.scale(winWidth * 0.45)
 	// .scale(200)
 	.translate([winWidth / 2, winHeight / 1.5]);
+
+// Vars for zooming
+var mapZScale = 4;
+var scaleMulti = mapZScale - 1;
 
 
 function loadMap(err, res) {
@@ -246,13 +251,20 @@ async function mapJourney(numb) {
 	// Update the journey spots/stops
 	function updateHotspot(point, routeItem) {
 		var updateJourney = mapCon
-		.selectAll('.spots-stop')
-		.data(journeyRoute)
+			.selectAll('.spots-stop')
+			.data(journeyRoute)
 			
 
 		updateJourney
 			.enter()
 			.append('circle')
+			.on('mouseenter', (d, i) => {
+				console.log('data', d, i);
+				// console.log(journeyRoute);
+				console.log(journeyData[numb].story);
+				return showStoryTip(journeyData[numb].story[i])
+			})
+			// .on('mouseleave', hideStoryTip)
 				.attr('class', 'spots-stop')
 				.attr('r', 0)
 				.attr('cx', d => projection(d)[0])
@@ -270,7 +282,9 @@ async function mapJourney(numb) {
 		updateJourney
 			.transition()
 			.duration(transDur)	
-			.attr('transform', () => zoomPoint(point, routeItem))				
+			.attr('transform', () => zoomPoint(point, routeItem))
+			// .selectAll('.spots-stop')				
+			.attr('fill', 'yellow')
 
 
 		// Removing the dots
@@ -394,6 +408,25 @@ function getRefHtml(n, d) {
 
 
 /*=================
+=== Hotspot tooltip
+=================*/
+
+var storyTip = d3.tip()
+	.attr('class', 'journey-detail')
+	.offset([-20, 0]);
+
+mapCon.call(storyTip);
+
+function showStoryTip(story) {
+	storyTip.html(story); // Set the content to be shown
+	storyTip.show();
+}
+
+function hideStoryTip(d) {
+	storyTip.hide();
+}
+
+/*=================
 === Map Zoombehaviour
 =================*/
 function zoomWorld(point, location) {
@@ -405,10 +438,10 @@ function zoomWorld(point, location) {
 		.style('stroke-width', strokeW) 
 }
 
-
+// Inspired from https://stackoverflow.com/questions/20409484/d3-js-zoomto-point-in-a-2d-map-projection
 function zoomPoint(point, item) {
-	if (item) { // Zoom to
-		return `translate(${-point[0] * 2}, ${-point[1] * 2}) scale(${3})`
+	if (item) { // Zoom & scale to
+		return `translate(${-point[0] * scaleMulti}, ${-point[1] * scaleMulti}) scale(${mapZScale})`
 	}
 	return ''; // Remove zoom
 }
