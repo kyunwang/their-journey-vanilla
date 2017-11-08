@@ -3,19 +3,29 @@
 /*=================
 === The vars
 =================*/
-var timeWidth = winWidth - 200;
+
+const margin = {
+	top: 48,
+	bottom: 96,
+	left: 24,
+	right: 24,
+}
+
+var timeWidth = winWidth - margin.left - margin.right;
 var timeHeight = 150;
 
 var timeCon = d3.select('#svg-time');
 var timeLine = timeCon
 	// .attr('viewBox', `0 0 ${winWidth} ${200}`)
-	.attr('width', winWidth)
-	.attr('height', timeHeight)
-
 	.attr('class', 'timeline')
+	.attr('width', timeWidth)
+	.attr('height', timeHeight)
+	// .attr('transform', `translate(${margin.left}, ${margin.top})`)
+	.attr('transform', `translate(${margin.left}, ${0})`)
 // .append('g')
 
-var timeX = d3.scaleTime().range([0, timeWidth]);
+// var timeX = d3.scaleTime().range([0, timeWidth - margin.left - margin.right]);
+var timeX = d3.scaleTime().range([0, timeWidth - margin.right]);
 var timeY = d3.scaleLinear().range([timeHeight - 20, 0]);
 // var timeZ = d3.scaleOrdinal(['#feca2f', '#2ffe63', '#2f63fe', '#fe2fca']);
 var timeZ = d3.scaleOrdinal(d3.schemeCategory10);
@@ -65,94 +75,66 @@ function renderTimeLine() {
 	// refugeeLine.selectAll('.my')
 	// 	.data(timeData)
 	// 	.enter()
-	// 	.append("text")
+	// 	.append('text')
 	// 	// .datum(timeData)
-	// 	.attr("transform", function (d) { return "translate(" + timeX(d.key) + "," + timeY(d.value.total) + ")"; })
-	// 	.attr("x", 3)
-	// 	.attr("dy", "0.35em")
-	// 	.style("font", "10px sans-serif")
+	// 	.attr('transform', function (d) { return 'translate(' + timeX(d.key) + ',' + timeY(d.value.total) + ')'; })
+	// 	.attr('x', 3)
+	// 	.attr('dy', '0.35em')
+	// 	.style('font', '10px sans-serif')
 	// 	.text(function (d) { return d.key; });
 
+	timeCon.append('text')
+		.attr('class', 'time-text')
+		.attr('transform', `translate(${timeWidth/2}, ${timeHeight/2 - 50})`)
+		.attr('text-anchor', 'middle')
+		.text('REFUGEES')
 
+	timeCon.append('text')
+		.attr('id', 'time-count-shower')
+		.attr('class', 'time-text')		
+		.attr('dy', 20)
+		.attr('transform', `translate(${timeWidth/2}, ${timeHeight/2})`)
+		.attr('text-anchor', 'middle')
+		.text('')
 
-
-
-
-	// var focus = timeLine.append("g")
-	// 	.attr("class", "focus")
-	// 	.style("display", "none");
-
-	// focus.append("circle")
-	// 	.attr("r", 4.5);
-
-	// focus.append("text")
-	// 	.attr("x", 9)
-	// 	.attr("dy", ".35em");
-
-	// timeLine.append("rect")
-	// 	.attr("class", "overlay")
-	// 	.attr("width", timeWidth)
-	// 	.attr("height", timeHeight)
-	// 	.on("mouseover", function () { focus.style("display", null); })
-	// 	.on("mouseout", function () { focus.style("display", "none"); })
-	// 	.on("mousemove", mousemove);
-
-
-	// var bisectDate = d3.bisector(function (d) { return parseT(d.key); }).left;
-
-	// function mousemove() {
-	// 	var x0 = timeX.invert(d3.mouse(this)[0]),
-	// 		i = bisectDate(timeData, x0, 1),
-	// 		d0 = timeData[i - 1],
-	// 		d1 = timeData[i],
-	// 		d = x0 - d0.key > d1.key - x0 ? d1 : d0;
-
-	// 	console.log(d);
-	// 	focus.attr("transform", "translate(" + timeX(parseT(d.key)) + "," + timeY(d.value.total) + ")");
-	// 	focus.select("text").text(d.value.total);
-	// }
-
-
-
-
-
-
+	
 
 
 
 
 	console.log(timeData);
 	// From https://bl.ocks.org/larsenmtl/e3b8b7c2ca4787f77d78f58d41c3da91
-	var mouseG = timeLine.append("g")
-		.attr("class", "mouse-over-effects");
+	// Added code to display/update the amount of refugees
+	var mouseG = timeLine.append('g')
+		.attr('class', 'mouse-over-effects');
 
-	mouseG.append("path") // this is the black vertical line to follow mouse
-		.attr("class", "mouse-line")
-		.style("stroke", "black")
-		.style("stroke-width", "1px")
-		.style("opacity", "0");
+	mouseG.append('path') // this is the black vertical line to follow mouse
+		.attr('class', 'mouse-line')
+		.style('stroke', 'black')
+		.style('stroke-width', '1px')
+		.style('opacity', '0');
 
 	var lines = document.getElementsByClassName('refugee-line');
 
 	var mousePerLine = mouseG.selectAll('.mouse-per-line')
 		.data(timeData)
 		.enter()
-		.append("g")
-		.attr("class", "mouse-per-line");
+		.append('g')
+		.attr('class', 'mouse-per-line');
 
-	mousePerLine.append("circle")
-		.attr("r", 7)
-		.style("stroke", function (d) {
-			// return color(d.name);
-			return 'red';
-		})
-		.style("fill", "none")
-		.style("stroke-width", "1px")
-		.style("opacity", "0");
+	// mousePerLine.append('circle')
+	// 	.attr('r', 7)
+	// 	.style('stroke', function (d) {
+	// 		// return color(d.name);
+	// 		return 'red';
+	// 	})
+	// 	.style('fill', 'none')
+	// 	.style('stroke-width', '1px')
+	// 	.style('opacity', '0');
 
-	mousePerLine.append("text")
-		.attr('class', 'classy')
-		.attr("transform", "translate(10,3)");
+	// mousePerLine.append('text')
+	// 	.attr('class', 'classy')
+	// 	.attr('transform', 'translate(10,3)');
 
 	mouseG.append('rect') // append a rect to catch mouse movements on canvas
 		.attr('width', timeWidth) // can't catch mouse events on a g element
@@ -160,32 +142,32 @@ function renderTimeLine() {
 		.attr('fill', 'none')
 		.attr('pointer-events', 'all')
 		.on('mouseout', function () { // on mouse out hide line, circles and text
-			d3.select(".mouse-line")
-				.style("opacity", "0");
-			d3.selectAll(".mouse-per-line circle")
-				.style("opacity", "0");
-			d3.selectAll(".mouse-per-line text")
-				.style("opacity", "0");
+			d3.select('.mouse-line')
+				.style('opacity', '0');
+			// d3.selectAll('.mouse-per-line circle')
+			// 	.style('opacity', '0');
+			// d3.selectAll('.mouse-per-line text')
+			// 	.style('opacity', '0');
 		})
 		.on('mouseover', function () { // on mouse in show line, circles and text
-			d3.select(".mouse-line")
-				.style("opacity", "1");
-			d3.selectAll(".mouse-per-line circle")
-				.style("opacity", "1");
-			d3.selectAll(".mouse-per-line text")
-				.style("opacity", "1");
+			d3.select('.mouse-line')
+				.style('opacity', '1');
+			// d3.selectAll('.mouse-per-line circle')
+			// 	.style('opacity', '1');
+			// d3.selectAll('.mouse-per-line text')
+			// 	.style('opacity', '1');
 		})
 		.on('mousemove', function () { // mouse moving over canvas
 			var mouse = d3.mouse(this);
-			d3.select(".mouse-line")
-				.attr("d", function () {
-					var d = "M" + mouse[0] + "," + timeHeight; // timeHeight = heigth
-					d += " " + mouse[0] + "," + 0;
+			d3.select('.mouse-line')
+				.attr('d', function () {
+					var d = 'M' + mouse[0] + ',' + timeHeight; // timeHeight = heigth
+					d += ' ' + mouse[0] + ',' + 0;
 					return d;
 				});
 
-			d3.selectAll(".mouse-per-line")
-				.attr("transform", function (d, i) {
+			d3.selectAll('.mouse-per-line')
+				.attr('transform', function (d, i) {
 					// console.log(timeWidth / mouse[0])
 					var xDate = timeX.invert(mouse[0]),
 						bisect = d3.bisector(function (d) {
@@ -209,13 +191,23 @@ function renderTimeLine() {
 						else break; //position found
 					}
 
-					d3.select(this)
-						.select('text')
+					
+					// d3.select(this)
+					// 	.select('text')
+					// 	.attr('fill', d => {
+					// 		console.log(1212, d);
+					// 		// console.log(this);
+					// 		// console.log(timeY.invert(pos.y).toFixed(0));
+					// 		return 'red'
+					// 	})
+					// 	.text(timeY.invert(pos.y).toFixed(0));
+					
+					d3.select('#time-count-shower')
 						.text(timeY.invert(pos.y).toFixed(0));
 
-					return "translate(" + mouse[0] + "," + pos.y + ")";
+					return 'translate(' + mouse[0] + ',' + pos.y + ')';
 				});
-		});
+			});
 }
 
 /*=================

@@ -29,7 +29,7 @@ html {
 
 body {
 	height: 100%; // background-color: #303030;
-	// margin: 0;
+	margin: 0;
 	// margin: var(--def-margin);
 	padding: 0;
 	font-family: sans-serif;
@@ -57,7 +57,7 @@ svg {
 .map-con {
 	// height: 100%;
 	text-align: center; // margin: var(--def-margin);
-	border: 1px solid #000;
+	// border: 1px solid #000;
 	overflow: hidden;
 	svg {}
 }
@@ -113,7 +113,7 @@ svg {
 .time-con {
 	// margin-top: 1em;
 	overflow: hidden;
-	background: rgba(0, 0, 0, .4);
+	// background: rgba(0, 0, 0, .4);
 	p {
 		position: absolute;
 	}
@@ -121,14 +121,29 @@ svg {
 
 .timeline {
 	padding: 1em 0;
+	margin: 0 .5em;
 }
 
 .refugee-line {
 	fill: none; // stroke: steelblue;
-	stroke: #fff;
+	// stroke: #fff;
+	stroke: #000;
 	stroke-linejoin: round;
 	stroke-linecap: round;
 	stroke-width: 2.5;
+}
+
+
+.time-text {
+	font-size: 1.5em;
+	fill: rgba(0, 0, 0, .1);
+	letter-spacing: .2em;	
+}
+
+#time-count-shower {
+	font-size: 5em;
+	font-weight: 700;
+	letter-spacing: 1em;
 }
 
 

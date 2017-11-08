@@ -29,9 +29,9 @@ projection
 	// .center([-100, 40.5])
 	.center([0, la])
 	.rotate([-lo, 0])
-	.scale(winWidth * 0.45)
+	.scale(winWidth * 0.65)
 	// .scale(200)
-	.translate([winWidth / 2, winHeight / 1.5]);
+	.translate([winWidth / 4, winHeight / 1.5]);
 
 // Vars for zooming
 var mapZScale = 4;
@@ -283,8 +283,10 @@ async function mapJourney(numb) {
 			.transition()
 			.duration(transDur)	
 			.attr('transform', () => zoomPoint(point, routeItem))
-			// .selectAll('.spots-stop')				
-			.attr('fill', 'yellow')
+			.attr('fill', '#fff')
+			// .attr('fill', 'transparent')
+			.attr('stroke', 'blue')
+			// .on('mouseenter', () => this.style('fill', 'blue'))
 
 
 		// Removing the dots
@@ -292,7 +294,6 @@ async function mapJourney(numb) {
 			.exit()
 			.transition()
 			.duration(transDurShort)
-			.attr('transform', () => zoomPoint(point, routeItem))		
 			.attr('r', 0)
 			.remove();
 	}
