@@ -98,3 +98,13 @@ function getName(country) {
 	}
 }
 
+
+
+
+var toInclude = [
+	'SYR', 'AFG', 'SRB', 'IRQ', 'ALB', 'ERI', 'PAK', 'SOM', 'CHI', 'UKR', 'TUR', 'CYP', 'PSE'
+];
+
+var toIncConti = ['Europe'] ;
+var toIncRegio = ['Sub-Saharan Africa', 'Middle East & North Africa'];
+var toIncSubRegio = ['Western Asia', 'Central Asia', 'Southern Asia', 'Eastern Asia', 'South-Eastern Asia'];
