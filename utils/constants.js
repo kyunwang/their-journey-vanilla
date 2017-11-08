@@ -34,11 +34,6 @@ var correctCenter = {
 }
 
 
-var toIgnore = [
-	'Canada', 'Australia', 'New Zealand', 'Japan', 'Rep. of Korea', 'Turkey',
-	'Stateless', 'Various/unknown', 'Tibetan', 'USA (EOIR)', 'USA (INS/DHS)', "Dem. People's Rep. of Korea", 'Viet Nam'
- ]
-
 // Seriously need iso codes instead but timeconstrains mate
 function getName(country) {
 	// console.log(country);
@@ -99,6 +94,11 @@ function getName(country) {
 }
 
 
+
+var toIgnore = [
+	'Canada', 'Australia', 'New Zealand', 'Japan', 'Rep. of Korea', 'Turkey',
+	'Stateless', 'Various/unknown', 'Tibetan', 'USA (EOIR)', 'USA (INS/DHS)', "Dem. People's Rep. of Korea", 'Viet Nam', 'Jamaica', 'Chile', 'Brazil', 'Colombia', 'Cuba', 'United States of America', 'Honduras', 'El Salvador', 'Mexico', 'Dominican Rep.', 'Venezuela', 'Guatemala', 'Solomon Islands', 'Peru', 'Lao', 'Sao Tome and Principe', 'Ecuador', 'Argentina', 'Bahamas'
+ ]
 
 
 var toInclude = [

@@ -223,3 +223,20 @@ svg {
 		font-size: 2em;
 	}
 }
+
+
+.location-detail {
+	flex: 1;
+	margin: 0.8em 0;
+	border: 1px solid gold;
+	border-radius: 2px;
+	padding: 1em;
+	background-color: #3a3a3a; // For the tooltip if we will use it
+	color: #fff;
+	p {
+		margin-bottom: 0.3em;
+	}
+	span {
+		font-weight: 300;
+	}
+}

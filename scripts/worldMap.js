@@ -28,10 +28,9 @@ projection
 	// .center([-100, 40.5])
 	.center([0, la])
 	.rotate([-lo, 0])
-	// .scale(winWidth * 0.55)
-	.scale(250)
-	.translate([winWidth / 2.5, winHeight / 1.1])
-	// .translate([winWidth / 2.5, winHeight / 2]);
+	.scale(winWidth * 0.45)
+	// .scale(200)
+	.translate([winWidth / 2, winHeight / 1.5]);
 
 
 function loadMap(err, res) {
@@ -75,7 +74,7 @@ function loadMap(err, res) {
 			return `${d.properties.NAME} country`
 		})
 		.attr('d', mapPath)
-		// .on('mouseenter', (d) => {console.log(d.properties.NAME);})
+		// .on('mouseenter', (d) => { console.log(d.properties.NAME); })
 
 
 	// centerPoints();
@@ -101,6 +100,8 @@ function centerPoints(data) {
 		.attr('stroke', '#fff')
 }
 
+
+
 function mapTraject(date) {
 	// Filter the data
 	var filterData = date !== 'all' ? refugeeData.filter(d => d.Datum === date) : refugeeData;
@@ -117,8 +118,8 @@ function mapTraject(date) {
 
 
 	var testtotal = d3.nest()
-	.key(d => d.Destination)
-	.entries(filterData)
+		.key(d => d.Destination)
+		.entries(filterData)
 	console.log(testtotal);
 
 
@@ -133,7 +134,11 @@ function mapTraject(date) {
 		.append('line')
 		.attr('class', 'trajectory')
 		// Assign starting point
-		.attr('x1', d => getCenterX(d.Origin))
+		.attr('x1', d => {
+			// console.log((d.Origin));
+			console.log(d.Origin, getCenterX(d.Origin));
+			return getCenterX(d.Origin)
+		})
 		.attr('y1', d => getCenterY(d.Origin))
 		.attr('x2', d => getCenterX(d.Origin))
 		.attr('y2', d => getCenterY(d.Origin))
@@ -149,28 +154,35 @@ function mapTraject(date) {
 		.attr('x1', d => getCenterX(d.Destination))
 		.attr('y1', d => getCenterY(d.Destination))
 
-		var routeBar = mapCon.append('g')
-			.attr('class', 'refbar-con')
-			.selectAll('rect')
-			.data(filterData)
+	var routeBar = mapCon.append('g')
+		.attr('class', 'refbar-con')
+		.on('mouseenter', () => showRefTip(totalValue, date)) // Call on g to select whole area
+		.on('mouseleave', hideRefTip)
+		
+		.selectAll('rect')
+		.data(filterData)
 
 
 
-		routeBar.enter()
-			.append('rect')
-			.attr('fill', 'red')
-			.attr('x', d => getCenterX(d.Destination) - 5)
-			.attr('y', d => getCenterY(d.Destination))
-			.attr('height', 0)
-			.attr('width', 10)
-			.transition()
-			.duration(transDur)
-			.delay((d, i) => seqDelayShort(i))
-			.attr('height', d => refbarHeight(d.Value))
-			.attr('y', function(d) {
-				// console.log(d.Destination);
-				return getCenterY(d.Destination) - refbarHeight(d.Value);
-			})
+	routeBar.enter()
+		.append('rect')
+		.attr('fill', 'red')
+		.attr('x', d => getCenterX(d.Destination) - 5)
+		.attr('y', d => getCenterY(d.Destination))
+		.attr('height', 0)
+		.attr('width', 10)
+		.transition()
+		.duration(transDur)
+		.delay((d, i) => seqDelayShort(i))
+		.attr('height', d => refbarHeight(d.Value))
+		.attr('y', function (d) {
+			// console.log(d.Destination);
+			return getCenterY(d.Destination) - refbarHeight(d.Value);
+		})
+
+	// routeBar.selectAll('rect').attr('fill','blue')
+	routeBar.attr('fill', 'blue')
+	// routeBar.exit().remove
 
 
 }
@@ -318,6 +330,34 @@ async function mapJourney(numb) {
 
 
 }
+
+
+
+/*=================
+=== Bars tooltip - @kyunwang fe-3-assessment-3
+=================*/
+
+var mapRefTip = d3.tip()
+	.attr('class', 'location-detail')
+	.offset([-10, 0]);
+
+mapCon.call(mapRefTip);
+
+function showRefTip(numb, date) {
+	mapRefTip.html(getRefHtml(numb ,date)); // Set the content to be shown
+	mapRefTip.show();
+}
+
+function hideRefTip(d) {
+	mapRefTip.hide();
+}
+
+function getRefHtml(n, d) {
+	return `
+	<p>${n} refugees arrived in ${d}</p>	
+`
+}
+
 
 /*=================
 === General functions
