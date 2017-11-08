@@ -300,6 +300,11 @@ async function mapJourney(numb) {
 
 
 	function addJourneyRoute() {
+		// Remove all the refugee bars when starting
+		if (d3.selectAll('.refbar-con')) {
+			d3.selectAll('.refbar-con').remove();
+		}
+
 		var jCoords = journeyData[numb].journeyCoords;
 
 
