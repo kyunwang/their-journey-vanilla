@@ -80,7 +80,6 @@ function sortByDateAscending2(a, b) {
 
 // Inspired and based on this sh file: https://github.com/lucified/lucify-refugees/blob/155bb072d10a3f8459a88da8305aa77130ab7806/prepare.sh
 function cleanWorld(world) {
-	console.log(world.objects);
 	world.objects.countries.geometries = world.objects.countries.geometries.filter(data => {
 	// world.objects.countries.geometries.filter(data => {
 		// console.log(toInclude.includes(data.properties.ADM0_A3));

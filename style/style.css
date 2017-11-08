@@ -96,4 +96,17 @@ body {
   color: 'blue';
   fill: "blue"; }
 
+#loader {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fff; }
+  #loader p {
+    text-align: center;
+    font-size: 2em; }
+
 /*# sourceMappingURL=style.css.map */

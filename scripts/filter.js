@@ -29,6 +29,8 @@ function renderFilter() {
 		console.log('yeee');
 
 		// console.log(mapTraject);
+		d3.selectAll('.refbar-con').remove('.refbar-con'); // Remove the bars as it does not update otherwise
+
 		mapTraject(this.value);
 
 	}
