@@ -11,7 +11,7 @@ async function loadRefugee(err, ref, test, world) {
 	world = await cleanWorld(world);
 	journeyData = await test;
 	console.log(journeyData);
-	console.log(world);
+	// console.log(world);
 
 	if (refugeeData && timeData && journeyData) {
 		d3.select('#loader')

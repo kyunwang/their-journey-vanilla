@@ -4,8 +4,8 @@
 var mapCon = d3.select('#svg-map');
 // var mapCon = d3.select('#svg-con');
 
-// var mapWidth = parseInt(mapCon.style('width'), 10);
-// var mapHeight = parseInt(mapCon.style('height'), 10);
+// var mapWidth = winWidth - 200;
+// var mapHeight = winHeight + 400;
 
 var world = mapCon
 	.attr('viewBox', `0 0 ${winWidth - 200} ${winHeight + 400}`)
@@ -74,12 +74,12 @@ function loadMap(err, res) {
 			return `${d.properties.NAME} country`
 		})
 		.attr('d', mapPath)
-		// .on('mouseenter', (d) => { console.log(d.properties.NAME); })
+	// .on('mouseenter', (d) => { console.log(d.properties.NAME); })
 
 
 	// centerPoints();
 	// mapTraject();
-	// mapJourney(0);
+	mapJourney(0);
 }
 
 
@@ -154,11 +154,12 @@ function mapTraject(date) {
 		.attr('x1', d => getCenterX(d.Destination))
 		.attr('y1', d => getCenterY(d.Destination))
 
+
 	var routeBar = mapCon.append('g')
 		.attr('class', 'refbar-con')
 		.on('mouseenter', () => showRefTip(totalValue, date)) // Call on g to select whole area
 		.on('mouseleave', hideRefTip)
-		
+
 		.selectAll('rect')
 		.data(filterData)
 
@@ -243,30 +244,41 @@ async function mapJourney(numb) {
 
 
 	// Update the journey spots/stops
-	function updateHotspot() {
-		var updateJourney = mapCon.selectAll('.me').data(journeyRoute)
+	function updateHotspot(point, routeItem) {
+		var updateJourney = mapCon
+		.selectAll('.spots-stop')
+		.data(journeyRoute)
+			
 
 		updateJourney
 			.enter()
 			.append('circle')
-			.attr('class', 'me')
-			.attr('r', 0)
-			.attr('cx', d => { return projection(d)[0] })
-			.attr('cy', d => projection(d)[1])
+				.attr('class', 'spots-stop')
+				.attr('r', 0)
+				.attr('cx', d => projection(d)[0])
+				.attr('cy', d => projection(d)[1])
+				.attr('fill', 'blue')
+				.transition()
+				.duration(transDur)			
+				.attr('r', 5)
+				// .attr('transform', `translate(${-point[0] * 2}, ${-point[1] * 2}) scale(${3})`) // To increase the dot size
+				.attr('transform', () => zoomPoint(point, routeItem))
+				
+				
+
+		// Update / scale the map to keep the dots in the correct position
+		updateJourney
 			.transition()
-			.duration(transDur)
-			.attr('r', 10)
-			.attr('cx', d => { return projection(d)[0] })
-			.attr('cy', d => projection(d)[1])
-			.attr('fill', 'blue');
+			.duration(transDur)	
+			.attr('transform', () => zoomPoint(point, routeItem))				
 
-		// updateJourney.transition()
-		// updateJourney
-		// 	.attr('fill', 'yellow');
 
-		updateJourney.exit()
+		// Removing the dots
+		updateJourney
+			.exit()
 			.transition()
 			.duration(transDurShort)
+			.attr('transform', () => zoomPoint(point, routeItem))		
 			.attr('r', 0)
 			.remove();
 	}
@@ -275,27 +287,36 @@ async function mapJourney(numb) {
 	function addJourneyRoute() {
 		var jCoords = journeyData[numb].journeyCoords;
 
+
 		// Checking wether to add route
 		if (journeyRoute.length < jCoords.length) {
 			// Get safe the current length 
 			checkpoint = journeyMap.node().getTotalLength();
-
+			
 			// Add new route/data
 			journeyRoute.push(jCoords[journeyRoute.length]);
+			
+			var routeItem = journeyRoute[journeyRoute.length - 1];
+			var point = projection(routeItem);
+			// if (journeyRoute.length > 3) {
+				// 	journeyRoute.shift()
+			// }
 
 			// Updating
 			d3.select(journeyMap.node())
 				.attr('d', pathLine(journeyRoute))
 				.transition()
 				.duration(transDur)
+				.attr('transform', () => zoomPoint(point, routeItem))
 				.attrTween('stroke-dasharray', function (d) {
 					var len = journeyMap.node().getTotalLength();
 					return function (t) {
 						return (d3.interpolateString(`${checkpoint}, ${len}`, `${len}, 0`))(t);
 					};
 				})
-			updateHotspot();
 
+			updateHotspot(point, routeItem);
+			zoomWorld(point, routeItem);
 
 			// Need another check when new data and different data comes in 
 
@@ -313,23 +334,36 @@ async function mapJourney(numb) {
 			// Remove route/data
 			journeyRoute.pop();
 
+
+			var routeItem = journeyRoute[journeyRoute.length - 1];
+			if (routeItem) {
+				var point = projection(routeItem);
+			}
+
 			// Updating
 			d3.select(journeyMap.node())
 				.attr('d', pathLine(journeyRoute))
 				.transition()
 				.duration(transDur)
+				.attr('transform', () => zoomPoint(point, routeItem))				
 				.attrTween('stroke-dasharray', function (d) {
 					var len = journeyMap.node().getTotalLength();
 					return function (t) {
 						return (d3.interpolateString(`${0}, ${len}`, `${len}, 0`))(t);
 					};
 				});
-			updateHotspot();
+
+			updateHotspot(point, routeItem);
+			zoomWorld(point, routeItem);
+			
+			
 		}
 	}
 
 
 }
+
+
 
 
 
@@ -344,7 +378,7 @@ var mapRefTip = d3.tip()
 mapCon.call(mapRefTip);
 
 function showRefTip(numb, date) {
-	mapRefTip.html(getRefHtml(numb ,date)); // Set the content to be shown
+	mapRefTip.html(getRefHtml(numb, date)); // Set the content to be shown
 	mapRefTip.show();
 }
 
@@ -360,10 +394,30 @@ function getRefHtml(n, d) {
 
 
 /*=================
+=== Map Zoombehaviour
+=================*/
+function zoomWorld(point, location) {
+	var strokeW = location ? 1 : 2.5;
+	world.transition()
+		.duration(transDur)
+		.attr('transform', () => zoomPoint(point, location))
+		.selectAll('.country')
+		.style('stroke-width', strokeW) 
+}
+
+
+function zoomPoint(point, item) {
+	if (item) { // Zoom to
+		return `translate(${-point[0] * 2}, ${-point[1] * 2}) scale(${3})`
+	}
+	return ''; // Remove zoom
+}
+
+/*=================
 === General functions
 =================*/
 function getCenterX(data) {
-	if (countryCenter[data] === undefined) return;
+	if (countryCenter[data] === undefined) return; // Check wether undefined
 	return projection(countryCenter[data])[0];
 }
 

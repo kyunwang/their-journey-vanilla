@@ -25,8 +25,7 @@ function renderFilter() {
 		.text(label => label);
 
 	function changeDate() {
-		console.log(this.value);
-		console.log('yeee');
+		console.log('filter selected: ',this.value);
 
 		// console.log(mapTraject);
 		d3.selectAll('.refbar-con').remove('.refbar-con'); // Remove the bars as it does not update otherwise
