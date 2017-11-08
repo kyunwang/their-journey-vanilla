@@ -76,15 +76,54 @@ function loadMap(err, res) {
 		.enter()
 		.append('path')
 		.attr('class', d => {
-			return `${d.properties.NAME} country`
+			// return `${d.properties.NAME} country`;
+			return `country`;
 		})
 		.attr('d', mapPath)
-	// .on('mouseenter', (d) => { console.log(d.properties.NAME); })
+	.on('mouseenter', handleCountryEnter)
+	.on('mouseleave', handleCountryLeave)
 
+	function handleCountryEnter(d) {
+		var cName = d.properties.NAME;
+		var cNameC = d.properties.ADM0_A3;		
+		// console.log(cName);
+		
+		world.append('text')
+			.text(cName)
+			.attr('class', `${cNameC} country-adm`)
+			.attr('x', d => getCenterX(cName))
+			.attr('y', d => getCenterY(cName))
+			.attr('dy', 2)
+			.attr('text-anchor', 'middle')
+			.attr('font-size', 16)
+			// .attr('fill', '#000')
+	}
 
-	// centerPoints();
-	// mapTraject();
-	mapJourney(0);
+	function handleCountryLeave(d) {
+		var cNameC = d.properties.ADM0_A3;
+		console.log(cNameC);
+		// console.log(cName);
+		world.select(`.${cNameC}`)
+			.remove();
+	}
+
+	// world.selectAll('text')
+	// 	.data(directionMapping)
+	// 	.enter()
+	// 	.append('text')
+	// 		.text(d => d.name)
+	// 		.attr('class', 'country-label')
+	// 		.attr('x', d => getCenterX(d.name))
+	// 		.attr('y', d => getCenterY(d.name))
+	// 		.attr('dy', 2)
+	// 		.attr('text-anchor', 'middle')
+	// 		.attr('font-size', 16)
+			
+			
+
+	// centerPoints(); // Render dots on all the center of the countries
+	// mapTraject(); // Render the course of all the refugees
+	mapJourney(0); // Select the first story (we only got one atm)
 }
 
 
@@ -109,23 +148,25 @@ function centerPoints(data) {
 
 function mapTraject(date) {
 	// Filter the data
-	var filterData = date !== 'all' ? refugeeData.filter(d => d.Datum === date) : refugeeData;
+	var filterData = (date !== 'all' && date !== undefined) ? refugeeData.filter(d => d.Datum === date) : refugeeData;
 
-	console.log(filterData)
+	// console.log(date)
+	// console.log(filterData)
+	// console.log(refugeeData)
 
 	var totalValue = filterData.reduce((a, b) => {
 		a = a.Value ? a.Value : a;
 		return (setNumber(a) + setNumber(b.Value));
 	});
 
-	console.log(totalValue);
+	// console.log(totalValue);
 
 
 
-	var testtotal = d3.nest()
-		.key(d => d.Destination)
-		.entries(filterData)
-	console.log(testtotal);
+	// var testtotal = d3.nest()
+	// 	.key(d => d.Destination)
+	// 	.entries(filterData)
+	// console.log(testtotal);
 
 
 
@@ -437,11 +478,19 @@ function hideStoryTip(d) {
 =================*/
 function zoomWorld(point, location) {
 	var strokeW = location ? 1 : 2.5;
-	world.transition()
-		.duration(transDur)
+	var fontSize = location ? 6 : 16;
+
+	var transitionWorld = world.transition()
+		.duration(transDur);
+
+	transitionWorld
 		.attr('transform', () => zoomPoint(point, location))
 		.selectAll('.country')
-		.style('stroke-width', strokeW) 
+		.style('stroke-width', strokeW)
+		
+	transitionWorld
+		.selectAll('.country-label')
+		.attr('font-size', fontSize)
 }
 
 // Inspired from https://stackoverflow.com/questions/20409484/d3-js-zoomto-point-in-a-2d-map-projection
