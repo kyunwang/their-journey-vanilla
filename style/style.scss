@@ -120,9 +120,12 @@ svg {
 	stroke-width: 2;
 }
 
+.refugee-bar {
+	fill: var(--primary-color);
+}
 
 // tooltip
-.refugee-bar {
+.refugee-bar-tip {
 	flex: 1;
 	max-width: 30em;
 	border: 1px solid var(--primary-color);
@@ -130,6 +133,7 @@ svg {
 	padding: 0 1em;
 	background-color: var(--bg-color); // For the tooltip if we will use it
 	color: var(--primary-color);
+	z-index: 1000;
 
 	// p {
 	// 	margin-bottom: 0.3em;
@@ -152,7 +156,8 @@ svg {
 	position: absolute;
 	top: 0;
 	right: 0;
-	width: 30%;
+	// width: 30%;
+	width: 21em;
 	height: 100%;
 
 	background-color: var(--primary-color);

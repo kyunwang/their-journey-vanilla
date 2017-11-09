@@ -180,14 +180,14 @@ function renderTimeLine() {
 
 					// Updating the text
 					d3.select('#time-count-shower')
-						// .text(timeY.invert(pos.y).toFixed(0));
-						.text((timeY.invert(pos.y).toFixed(0) / moment(timeX.invert(pos.x)).daysInMonth()).toFixed(0));
+						.text(timeY.invert(pos.y).toFixed(0));
+						// .text((timeY.invert(pos.y).toFixed(0) / moment(timeX.invert(pos.x)).daysInMonth()).toFixed(0));
 
 					// console.log(moment(timeX.invert(pos.x)).daysInMonth());
 
 					d3.select('#time-date')
-						.text(`IN ${moment(timeX.invert(pos.x)).format('D MMM YYYY')}`);
-					// .text(`IN ${moment(timeX.invert(pos.x)).format('MMM YYYY')}`);
+						// .text(`IN ${moment(timeX.invert(pos.x)).format('D MMM YYYY')}`);
+						.text(`IN ${moment(timeX.invert(pos.x)).format('MMM YYYY')}`);
 
 					return 'translate(' + mouse[0] + ',' + pos.y + ')';
 				});

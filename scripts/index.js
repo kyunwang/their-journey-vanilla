@@ -28,8 +28,6 @@ async function loadRefugee(err, ref, journey, world) {
 		d3.select('#loader')
 			.style('display', 'none');
 
-		console.log();
-
 		// Render the map
 		// d3.json('data/ne_50m_admin_0_countries_lakes.json', loadMap);
 

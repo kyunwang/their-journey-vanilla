@@ -4,9 +4,10 @@
 var mapCon = d3.select('#svg-map');
 
 var world = mapCon
-	.attr('viewBox', `0 0 ${winWidth - 200} ${winHeight + 600}`)
+	.attr('viewBox', `0 0 ${winWidth - 200} ${winHeight + 1200}`)
+	// .attr('viewBox', `0 0 ${winWidth - 200} ${winHeight + 600}`)
 	.attr('width', winWidth)
-	.attr('height', winHeight)
+	.attr('height', winHeight + 400)
 	.append('g')
 	.attr('class', 'world');
 
@@ -24,8 +25,8 @@ var mapPath = d3.geoPath()
 projection
 	.center([0, la])
 	.rotate([-lo, 0])
-	.scale(winWidth * 0.65)
-	.translate([winWidth / 4, winHeight / 1.5]);
+	.scale(winWidth * 0.7)
+	.translate([winWidth / 4, winHeight ]);
 
 // Vars for zooming
 var mapZScale = 4;
@@ -160,24 +161,14 @@ function mapTraject(date) {
 	// Filter the data
 	// var filterData = (date !== 'all' && date !== undefined) ? refugeeData.filter(d => d.Datum === date) : refugeeData;
 	var filterData = refugeeData.filter(d => d.Datum === date);
-
-	// console.log(date)
-	// console.log(filterData)
-	// console.log(refugeeData)
-
-	var totalValue = filterData.reduce((a, b) => {
-		a = a.Value ? a.Value : a;
-		return (setNumber(a) + setNumber(b.Value));
-	});
-
-	// console.log(totalValue);
+	// var filterData = refugeeData;
 
 
+	// var totalValue = filterData.reduce((a, b) => {
+	// 	a = a.Value ? a.Value : a;
+	// 	return (setNumber(a) + setNumber(b.Value));
+	// });
 
-	// var testtotal = d3.nest()
-	// 	.key(d => d.Destination)
-	// 	.entries(filterData)
-	// console.log(testtotal);
 
 
 
@@ -187,60 +178,61 @@ function mapTraject(date) {
 		// .data(refugeeData)
 		.data(filterData);
 
-	routeTraject.enter()
-		.append('line')
-		.attr('class', 'trajectory')
-		// Assign starting point
-		.attr('x1', d => {
-			// console.log((d.Origin));
-			console.log(d.Origin, getCenterX(d.Origin));
-			return getCenterX(d.Origin)
-		})
-		.attr('y1', d => getCenterY(d.Origin))
-		.attr('x2', d => getCenterX(d.Origin))
-		.attr('y2', d => getCenterY(d.Origin))
-		.transition()
-		.duration(transDurShort)
-		.delay((d, i) => seqDelayShort(i))
-		// Transition to desitnation
-		.attr('x2', d => getCenterX(d.Destination))
-		.attr('y2', d => getCenterY(d.Destination))
-		.transition()
-		.duration(transDurShort)
-		// End line at desitnation
-		.attr('x1', d => getCenterX(d.Destination))
-		.attr('y1', d => getCenterY(d.Destination))
+		routeTraject.enter()
+			.append('line')
+			.attr('class', 'trajectory')
+			// Assign starting point
+			.attr('x1', d => {
+				// console.log((d.Origin));
+				// console.log(d.Origin, getCenterX(d.Origin));
+				return getCenterX(d.Origin)
+			})
+			.attr('y1', d => getCenterY(d.Origin))
+			.attr('x2', d => getCenterX(d.Origin))
+			.attr('y2', d => getCenterY(d.Origin))
+			.transition()
+			.duration(transDurShort)
+			.delay((d, i) => seqDelayShort(i))
+			// Transition to desitnation
+			.attr('x2', d => getCenterX(d.Destination))
+			.attr('y2', d => getCenterY(d.Destination))
+			.transition()
+			.duration(transDurShort)
+			// End line at desitnation
+			.attr('x1', d => getCenterX(d.Destination))
+			.attr('y1', d => getCenterY(d.Destination))
 
 
-	var routeBar = mapCon.append('g')
-		.attr('class', 'refbar-con')
-		.on('mouseenter', () => showRefTip(totalValue, date)) // Call on g to select whole area
-		.on('mouseleave', hideRefTip)
-
-		.selectAll('rect')
-		.data(filterData)
+		var routeBar = mapCon.append('g')
+			.attr('class', 'refbar-con')
+			// .on('mouseenter', () => showRefTip(totalValue, date)) // Call on g to select whole area
+			.selectAll('rect')
+			.data(filterData)
 
 
 
-	routeBar.enter()
-		.append('rect')
-		.attr('fill', 'red')
-		.attr('x', d => getCenterX(d.Destination) - 5)
-		.attr('y', d => getCenterY(d.Destination))
-		.attr('height', 0)
-		.attr('width', 10)
-		.transition()
-		.duration(transDur)
-		.delay((d, i) => seqDelayShort(i))
-		.attr('height', d => refbarHeight(d.Value))
-		.attr('y', function (d) {
-			// console.log(d.Destination);
-			return getCenterY(d.Destination) - refbarHeight(d.Value);
-		})
+		routeBar.enter()
+			.append('rect')
+			.on('mouseenter', (d) => showRefTip(d.Value, date, d)) // Not fully correct. Only topbar
+			.on('mouseleave', hideRefTip)
+			
+			.attr('class', 'refugee-bar')
+			.attr('x', d => getCenterX(d.Destination) - 5)
+			.attr('y', d => getCenterY(d.Destination))
+			.attr('height', 0)
+			.attr('width', 10)
+			.transition()
+			.duration(transDur)
+			.delay((d, i) => seqDelayShort(i))
+			.attr('height', d => refbarHeight(d.Value))
+			.attr('y', function (d) {
+				// console.log(d.Destination);
+				return getCenterY(d.Destination) - refbarHeight(d.Value);
+			})
 
-	// routeBar.selectAll('rect').attr('fill','blue')
-	routeBar.attr('fill', 'blue')
-	// routeBar.exit().remove
+		// routeBar.selectAll('rect').attr('fill','blue')
+		routeBar.attr('fill', 'blue')
+		// routeBar.exit().remove
 
 
 }
@@ -248,7 +240,7 @@ function mapTraject(date) {
 // The journey/story function
 async function mapJourney(storyId) {
 	var checkpoint;
-	console.log(journeyData[storyId].journeyCoords);
+	// console.log(journeyData[storyId].journeyCoords);
 	if (journeyData[storyId].journeyCoords.length === 0) {
 		journeyData.map(data => {
 			data.journey.map((country, i) => {
@@ -312,9 +304,9 @@ async function mapJourney(storyId) {
 			.enter()
 			.append('circle')
 			.on('mouseenter', (d, i) => {
-				console.log('data', d, i);
+				// console.log('data', d, i);
 				// console.log(journeyRoute);
-				console.log(journeyData[storyId].story);
+				// console.log(journeyData[storyId].story);
 				showStory(journeyData[storyId].story[i]);
 			})
 			// .on('mouseleave', hideStoryTip)
@@ -464,7 +456,7 @@ async function mapJourney(storyId) {
 =================*/
 
 var mapRefTip = d3.tip()
-	.attr('class', 'refugee-bar')
+	.attr('class', 'refugee-bar-tip')
 	.offset([-10, 0]);
 
 mapCon.call(mapRefTip);
@@ -581,5 +573,9 @@ function setNumber(numb) {
 }
 
 function refbarHeight(numb) {
-	return numb / 20;
+	var totalHeight = numb / 30;
+	if (totalHeight > 5) {
+		return totalHeight;
+	}
+	return 3;
 } 
