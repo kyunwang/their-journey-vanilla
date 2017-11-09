@@ -248,15 +248,16 @@ function mapTraject(date) {
 // The journey/story function
 async function mapJourney(storyId) {
 	var checkpoint;
-
-	// await journeyData.map(data => {
-	journeyData.map(data => {
-		data.journey.map((country, i) => {
-			journeyData[storyId].journeyCoords.push(countryCenter[country]);
-			// journeyRoute.push(countryCenter[country]);
-			// console.log(country);
+	console.log(journeyData[storyId].journeyCoords);
+	if (journeyData[storyId].journeyCoords.length === 0) {
+		journeyData.map(data => {
+			data.journey.map((country, i) => {
+				journeyData[storyId].journeyCoords.push(countryCenter[country]);
+				// journeyRoute.push(countryCenter[country]);
+				// console.log(country);
+			})
 		})
-	})
+	}
 
 	// journeyRoute.push(journeyData[storyId].journeyCoords[0]);
 	// console.log(journeyRoute);
