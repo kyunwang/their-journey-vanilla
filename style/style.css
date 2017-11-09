@@ -26,6 +26,9 @@ body {
   margin: 0;
   padding: 0; }
 
+::-webkit-scrollbar {
+  display: none; }
+
 /*=================
 === Svg styling
 =================*/
@@ -51,19 +54,43 @@ body {
   stroke: red;
   stroke-width: 2; }
 
+/*=================
+=== Journey
+=================*/
+.journey-line {
+  fill: none;
+  stroke: red;
+  stroke-width: 2; }
+
+.journey-detail {
+  flex: 1;
+  max-width: 30em;
+  margin: 0.8em 0;
+  border: 1px solid gold;
+  border-radius: 2px;
+  padding: 1em;
+  background-color: #3a3a3a;
+  color: #fff; }
+  .journey-detail p {
+    margin-bottom: 0.3em; }
+  .journey-detail span {
+    font-weight: 300; }
+
 .menu {
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: absolute;
   top: 0;
   right: 0;
-  width: 25%;
+  width: 30%;
   height: 100%;
   background-color: red;
   transition: transform 1s ease; }
   .menu.active {
-    transform: translate(0, 0); }
+    transform: translate(0, 0);
+    position: fixed; }
   .menu button {
     align-self: flex-end;
     margin-bottom: 1.5em; }
@@ -98,29 +125,13 @@ body {
     transform: translateY(-50%) translateX(-45%) rotate(-90deg);
     margin: 0 auto; }
 
+.story-content {
+  padding-right: 2em;
+  padding-left: 2.8em;
+  text-align: start; }
+
 .hide {
   display: none; }
-
-/*=================
-=== Journey
-=================*/
-.journey-line {
-  fill: none;
-  stroke: red;
-  stroke-width: 2; }
-
-.journey-detail {
-  flex: 1;
-  margin: 0.8em 0;
-  border: 1px solid gold;
-  border-radius: 2px;
-  padding: 1em;
-  background-color: #3a3a3a;
-  color: #fff; }
-  .journey-detail p {
-    margin-bottom: 0.3em; }
-  .journey-detail span {
-    font-weight: 300; }
 
 /*=================
 === Timeline

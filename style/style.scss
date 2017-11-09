@@ -36,6 +36,10 @@ body {
 	// background-color: rgba(0, 0, 0, .7);
 }
 
+::-webkit-scrollbar { 
+	display: none; 
+}
+
 
 
 /*=================
@@ -83,17 +87,51 @@ svg {
 	stroke-width: 2;
 }
 
+/*=================
+=== Journey
+=================*/
+
+.journey-line {
+	fill: none;
+	stroke: red;
+	stroke-width: 2;
+}
+
+
+// tooltip
+.journey-detail {
+	flex: 1;
+	max-width: 30em;
+	margin: 0.8em 0;
+	border: 1px solid gold;
+	border-radius: 2px;
+	padding: 1em;
+	background-color: #3a3a3a; // For the tooltip if we will use it
+	color: #fff;
+
+	p {
+		margin-bottom: 0.3em;
+	}
+	span {
+		font-weight: 300;
+	}
+}
+
+
 
 .menu {
+
+	overflow: scroll;
+	
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	position: absolute;
 	top: 0;
 	right: 0;
-	width: 25%;
+	width: 30%;
 	height: 100%;
-	// height: 100vh;
+
 	background-color: red;
 
 	// transform: translate(-100%, 0);
@@ -103,8 +141,8 @@ svg {
 	transition: transform 1s ease ;
 
 	&.active {
-	transform: translate(0, 0);
-	
+		transform: translate(0, 0);
+		position: fixed;
 	}
 
 	button {
@@ -163,6 +201,13 @@ svg {
 	}
 }
 
+.story-content {
+	padding-right: 2em;
+	padding-left: 2.8em;
+	// padding: 0 2.8em;
+	text-align: start;	
+}
+
 .menu-list {
 
 }
@@ -171,34 +216,6 @@ svg {
 	display: none;
 }
 
-
-/*=================
-=== Journey
-=================*/
-
-.journey-line {
-	fill: none;
-	stroke: red;
-	stroke-width: 2;
-}
-
-
-// tooltip
-.journey-detail {
-	flex: 1;
-	margin: 0.8em 0;
-	border: 1px solid gold;
-	border-radius: 2px;
-	padding: 1em;
-	background-color: #3a3a3a; // For the tooltip if we will use it
-	color: #fff;
-	p {
-		margin-bottom: 0.3em;
-	}
-	span {
-		font-weight: 300;
-	}
-}
 
 /*=================
 === Timeline

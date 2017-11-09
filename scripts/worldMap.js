@@ -303,8 +303,7 @@ async function mapJourney(numb) {
 				console.log('data', d, i);
 				// console.log(journeyRoute);
 				console.log(journeyData[numb].story);
-				showStory();
-				return showStoryTip(journeyData[numb].story[i])
+				showStory(journeyData[numb].story[i]);
 			})
 			// .on('mouseleave', hideStoryTip)
 				.attr('class', 'spots-stop')
@@ -461,19 +460,34 @@ function getRefHtml(n, d) {
 === Hotspot tooltip
 =================*/
 
-var storyTip = d3.tip()
-	.attr('class', 'journey-detail')
-	.offset([-20, 0]);
+// var storyTip = d3.tip()
+// 	.attr('class', 'journey-detail')
+// 	.offset([-20, 0]);
 
-mapCon.call(storyTip);
+// mapCon.call(storyTip);
 
-function showStoryTip(story) {
-	storyTip.html(story); // Set the content to be shown
-	storyTip.show();
-}
+// function showStoryTip(story) {
+// 	storyTip.html(story); // Set the content to be shown
+// 	storyTip.show();
+// }
 
-function hideStoryTip(d) {
-	storyTip.hide();
+// function hideStoryTip(d) {
+// 	storyTip.hide();
+// }
+
+
+function showStory(story) {
+	console.log(story);
+	d3.select('.story-content')
+		.html(story)
+
+	// d3.select('.menu-list')
+	// 	.classed('hide', function() {
+	// 		return !this.classList.contains('hide')
+	// 	});
+
+	d3.select('.menu-list')
+		.classed('hide', true);
 }
 
 /*=================

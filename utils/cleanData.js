@@ -6,7 +6,7 @@ function cleanRefugee(res) {
 
 	const allData = d3.csvParseRows(res, map);
 	allData.sort(sortByDateAscending);
-	console.log(allData);
+	// console.log(allData);
 	return allData;
 
 	function map(d, i) {
