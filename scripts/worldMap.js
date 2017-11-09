@@ -378,6 +378,7 @@ async function mapJourney(numb) {
 
 			updateHotspot(point, routeItem);
 			zoomWorld(point, routeItem);
+			showStory(journeyData[numb].story[journeyRoute.length - 1])
 
 			// Need another check when new data and different data comes in 
 
@@ -434,6 +435,7 @@ async function mapJourney(numb) {
 
 			updateHotspot(point, routeItem);
 			zoomWorld(point, routeItem);
+			showStory(journeyData[numb].story[journeyRoute.length - 1]);
 			
 			
 		}
@@ -493,17 +495,16 @@ function getRefHtml(n, d) {
 
 
 function showStory(story) {
-	console.log(story);
+	if (story) {
+		d3.select('.menu-list')
+			.classed('hide', true);
+	} else {
+		d3.select('.menu-list')
+			.classed('hide', false);
+	}
+
 	d3.select('.story-content')
 		.html(story)
-
-	// d3.select('.menu-list')
-	// 	.classed('hide', function() {
-	// 		return !this.classList.contains('hide')
-	// 	});
-
-	d3.select('.menu-list')
-		.classed('hide', true);
 }
 
 /*=================
