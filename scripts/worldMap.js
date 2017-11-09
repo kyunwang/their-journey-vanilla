@@ -382,7 +382,23 @@ async function mapJourney(numb) {
 			// Need another check when new data and different data comes in 
 
 		} else {
-			// zoomWorld(); and zoom out lines and hotspots
+			// Zoom out again for an overview
+			d3.select(journeyMap.node())
+				// .attr('d', pathLine(journeyRoute))
+				.transition()
+				.duration(transDur)
+				.attr('transform', () => zoomPoint())
+				// .attrTween('stroke-dasharray', function (d) {
+				// 	var len = journeyMap.node().getTotalLength();
+				// 	return function (t) {
+				// 		return (d3.interpolateString(`${checkpoint}, ${len}`, `${len}, 0`))(t);
+				// 	};
+				// })
+
+
+			updateHotspot();
+			zoomWorld(); // and zoom out lines and hotspots
+			showStory(journeyData[numb].story[journeyRoute.length])
 		}
 	}
 
