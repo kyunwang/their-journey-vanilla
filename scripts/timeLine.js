@@ -54,6 +54,28 @@ function renderTimeLine() {
 	timeZ.domain(timeData.map(function (d) { return d.key; }));
 
 
+	timeCon.append('text')
+		.attr('class', 'time-text')
+		.attr('transform', `translate(${timeWidth / 2}, ${timeHeight / 2 - 50})`)
+		.attr('text-anchor', 'middle')
+		.text('REFUGEES FLED')
+
+	timeCon.append('text')
+		.attr('id', 'time-count-shower')
+		.attr('class', 'time-text')
+		.attr('dy', 20)
+		.attr('transform', `translate(${timeWidth / 2}, ${timeHeight / 2})`)
+		.attr('text-anchor', 'middle')
+		.text('')
+
+	timeCon.append('text')
+		.attr('id', 'time-date')
+		.attr('class', 'time-text')
+		.attr('transform', `translate(${timeWidth / 2}, ${timeHeight / 2 + 50})`)
+		.attr('text-anchor', 'middle')
+		.text('')
+
+
 
 
 	var refugeeLine = timeLine; // Easier to distinguish
@@ -63,47 +85,6 @@ function renderTimeLine() {
 		.attr('class', 'refugee-line')
 		.attr('d', myLine);
 
-
-	// refugeeLine.append('g')
-	// 	.attr('transform', `translate(0, ${timeHeight})`)
-	// 	.call(d3.axisBottom(timeX))
-	// 	.select('.domain')
-	// 	.remove();
-
-
-	// refugeeLine.selectAll('.my')
-	// 	.data(timeData)
-	// 	.enter()
-	// 	.append('text')
-	// 	// .datum(timeData)
-	// 	.attr('transform', function (d) { return 'translate(' + timeX(d.key) + ',' + timeY(d.value.total) + ')'; })
-	// 	.attr('x', 3)
-	// 	.attr('dy', '0.35em')
-	// 	.style('font', '10px sans-serif')
-	// 	.text(function (d) { return d.key; });
-
-	timeCon.append('text')
-		.attr('class', 'time-text')
-		.attr('transform', `translate(${timeWidth/2}, ${timeHeight/2 - 50})`)
-		.attr('text-anchor', 'middle')
-		.text('REFUGEES FLED')
-
-	timeCon.append('text')
-		.attr('id', 'time-count-shower')
-		.attr('class', 'time-text')		
-		.attr('dy', 20)
-		.attr('transform', `translate(${timeWidth/2}, ${timeHeight/2})`)
-		.attr('text-anchor', 'middle')
-		.text('')
-		
-	timeCon.append('text')
-		.attr('id', 'time-date')
-		.attr('class', 'time-text')		
-		.attr('transform', `translate(${timeWidth/2}, ${timeHeight/2 + 50})`)
-		.attr('text-anchor', 'middle')
-		.text('')
-
-	
 
 
 
@@ -116,8 +97,8 @@ function renderTimeLine() {
 
 	mouseG.append('path') // this is the black vertical line to follow mouse
 		.attr('class', 'mouse-line')
-		.style('stroke', 'black')
-		.style('stroke-width', '1px')
+		// .style('stroke', 'black')
+		// .style('stroke-width', '1px')
 		.style('opacity', '0');
 
 	var lines = document.getElementsByClassName('refugee-line');
@@ -202,15 +183,15 @@ function renderTimeLine() {
 						// .text(timeY.invert(pos.y).toFixed(0));
 						.text((timeY.invert(pos.y).toFixed(0) / moment(timeX.invert(pos.x)).daysInMonth()).toFixed(0));
 
-						// console.log(moment(timeX.invert(pos.x)).daysInMonth());
+					// console.log(moment(timeX.invert(pos.x)).daysInMonth());
 
 					d3.select('#time-date')
 						.text(`IN ${moment(timeX.invert(pos.x)).format('D MMM YYYY')}`);
-						// .text(`IN ${moment(timeX.invert(pos.x)).format('MMM YYYY')}`);
+					// .text(`IN ${moment(timeX.invert(pos.x)).format('MMM YYYY')}`);
 
 					return 'translate(' + mouse[0] + ',' + pos.y + ')';
 				});
-			});
+		});
 }
 
 /*=================

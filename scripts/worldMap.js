@@ -463,7 +463,7 @@ async function mapJourney(storyId) {
 =================*/
 
 var mapRefTip = d3.tip()
-	.attr('class', 'location-detail')
+	.attr('class', 'refugee-bar')
 	.offset([-10, 0]);
 
 mapCon.call(mapRefTip);
