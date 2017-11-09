@@ -10,22 +10,23 @@ d3.select('.menu-btn').on('click', function () {
 		});
 })
 
-async function loadRefugee(err, ref, test, world) {
+
+// Primary loader of data
+async function loadRefugee(err, ref, journey, world) {
 	if (err) return err;
-	console.log(12312);
 
 	// Set cleaned global data available
 	refugeeData = await cleanRefugee(ref);
 	timeData = await cleanTime(refugeeData)
 	world = await cleanWorld(world);
-	journeyData = await test;
+	journeyData = await journey;
 	console.log(journeyData);
 	// console.log(world);
 	
 
 	if (refugeeData && timeData && journeyData) {
 		d3.select('#loader')
-			.style('display', 'none')
+			.style('display', 'none');
 
 		console.log();
 
@@ -51,6 +52,6 @@ d3.queue()
 	.defer(d3.text, 'data/to_germany_2014.csv')
 	// .defer(d3.text, 'data/all_refugees12.csv')
 	// .defer(d3.text, 'data/all_refugees12-16.csv')
-	.defer(d3.json, 'data/test.json')
+	.defer(d3.json, 'data/journey.json')
 	.defer(d3.json, 'data/ne_50m_admin_0_countries_lakes.json')
-	.await(loadRefugee)
+	.await(loadRefugee);
