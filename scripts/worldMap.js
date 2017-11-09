@@ -150,6 +150,8 @@ function centerPoints(data) {
 
 
 function mapTraject(date) {
+	resetAll();
+
 	// Filter the data
 	var filterData = (date !== 'all' && date !== undefined) ? refugeeData.filter(d => d.Datum === date) : refugeeData;
 
@@ -245,7 +247,7 @@ async function mapJourney(numb) {
 	journeyData.map(data => {
 		data.journey.map((country, i) => {
 			journeyData[numb].journeyCoords.push(countryCenter[country]);
-			journeyRoute.push(countryCenter[country]);
+			// journeyRoute.push(countryCenter[country]);
 			// console.log(country);
 		})
 	})
@@ -437,8 +439,9 @@ async function mapJourney(numb) {
 			updateHotspot(point, routeItem);
 			zoomWorld(point, routeItem);
 			showStory(journeyData[numb].story[journeyRoute.length - 1]);
-			
-			
+			if (!routeItem) {
+				resetAll();
+			}
 		}
 	}
 
@@ -495,22 +498,26 @@ function getRefHtml(n, d) {
 // }
 d3.select('#story-end')
 	.on('click', function() {
-		console.log('ednignd');
-		// Reset the journeyRoute
+		// Hide the reset button
+		d3.select(this)
+			.style('display', 'none');
+
+		resetAll();
+	})
+
+
+	// Reset all data
+	function resetAll() {
+		// Reset the journeyRoute		
 		journeyRoute = [];
 
-		// Shgow the menu conent again
+		// Show the menu conent again
 		d3.select('.menu-list')
 			.classed('hide', false);
 
 		// Remove the story content
 		d3.select('.story-content')
-			.html(null)
-
-		// Hide the reset button
-		d3.select(this)
-			.style('display', 'none')
-
+			.html(null);
 
 		// Remove all hotspots/stops
 		d3.selectAll('.spots-stop')
@@ -518,8 +525,9 @@ d3.select('#story-end')
 
 		// Remove the journey line
 		d3.select('.journey-line')
-			.remove();
-	})
+			.attr('d', null)
+
+	}
 
 
 // 	d3.select('#story-end')
