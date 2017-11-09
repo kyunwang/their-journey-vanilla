@@ -1,2 +1,4 @@
 style/*.map
 style/.sass-cache
+
+.vscode
