@@ -78,7 +78,7 @@ function loadMap(err, res) {
 		}
 
 
-		// Quick fix for center of France (prototype)
+		// Quick fix for center of few countries (prototype)
 		if (correctCenter[item.properties.ADM0_A3]) {
 			var adm0 = correctCenter[item.properties.ADM0_A3]
 
@@ -170,12 +170,9 @@ function mapTraject(date) {
 	// });
 
 
-
-
 	var routeTraject = mapCon.append('g')
 		.attr('class', 'traject-con')
 		.selectAll('line')
-		// .data(refugeeData)
 		.data(filterData);
 
 		routeTraject.enter()
@@ -213,7 +210,7 @@ function mapTraject(date) {
 
 		routeBar.enter()
 			.append('rect')
-			.on('mouseenter', (d) => showRefTip(d.Value, date, d)) // Not fully correct. Only topbar
+			.on('mouseenter', (d) => showRefTip(getCountryTotal(d.Destination), date))
 			.on('mouseleave', hideRefTip)
 			
 			.attr('class', 'refugee-bar')
@@ -224,16 +221,31 @@ function mapTraject(date) {
 			.transition()
 			.duration(transDur)
 			.delay((d, i) => seqDelayShort(i))
-			.attr('height', d => refbarHeight(d.Value))
+			// .attr('height', d => refbarHeight(d.Value))
+			.attr('height', d => refbarHeight(getCountryTotal(d.Destination)))
 			.attr('y', function (d) {
-				// console.log(d.Destination);
-				return getCenterY(d.Destination) - refbarHeight(d.Value);
+				// return getCenterY(d.Destination) - refbarHeight(d.Value);
+				// console.log(getCountryTotal(d.Destination));
+				return getCenterY(d.Destination) - refbarHeight(getCountryTotal(d.Destination));
 			})
 
 		// routeBar.selectAll('rect').attr('fill','blue')
 		routeBar.attr('fill', 'blue')
 		// routeBar.exit().remove
 
+
+		function getCountryTotal(dest) {
+			// return 10
+			var singleCountry = filterData.filter(d => d.Destination == dest);
+
+			return singleCountry.reduce((a, b) => {
+				if (a.Destination == dest || b.Destination == dest) {
+					a = a.Value ? a.Value : a;
+					return (setNumber(a) + setNumber(b.Value));
+				}
+			})
+				// if (!a) return b.Value;
+		}
 
 }
 
@@ -462,6 +474,7 @@ var mapRefTip = d3.tip()
 mapCon.call(mapRefTip);
 
 function showRefTip(numb, date) {
+	console.log(numb);
 	mapRefTip.html(getRefHtml(numb, date)); // Set the content to be shown
 	mapRefTip.show();
 }
@@ -573,7 +586,7 @@ function setNumber(numb) {
 }
 
 function refbarHeight(numb) {
-	var totalHeight = numb / 30;
+	var totalHeight = numb / 100;
 	if (totalHeight > 5) {
 		return totalHeight;
 	}

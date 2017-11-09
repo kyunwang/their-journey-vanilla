@@ -20,7 +20,7 @@ async function loadRefugee(err, ref, journey, world) {
 	timeData = await cleanTime(refugeeData)
 	world = await cleanWorld(world);
 	journeyData = await journey;
-	console.log(journeyData);
+	// console.log(journeyData);
 	// console.log(world);
 	
 
@@ -47,8 +47,8 @@ async function loadRefugee(err, ref, journey, world) {
 }
 
 d3.queue()
-	.defer(d3.text, 'data/to_germany_2014.csv')
-	// .defer(d3.text, 'data/all_refugees12.csv')
+	// .defer(d3.text, 'data/to_germany_2014.csv')
+	.defer(d3.text, 'data/all_refugees12.csv')
 	// .defer(d3.text, 'data/all_refugees12-16.csv')
 	.defer(d3.json, 'data/journey.json')
 	.defer(d3.json, 'data/ne_50m_admin_0_countries_lakes.json')

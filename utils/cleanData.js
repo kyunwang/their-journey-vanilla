@@ -10,6 +10,7 @@ function cleanRefugee(res) {
 	return allData;
 
 	function map(d, i) {
+		// console.log(d);
 		if (i === 0) {
 			keys = d;
 			return;
@@ -41,6 +42,8 @@ var parseTime = d3.timeParse('%Y/%m %I:%M%p');
 
 function cleanTime(res) {
 	// Nesting doc: http://bl.ocks.org/phoebebright/raw/3176159/
+
+	// console.log(res);
 	var time = d3.nest()
 		.key(function (d) { return d.Datum; })
 		.rollup(function (d) {

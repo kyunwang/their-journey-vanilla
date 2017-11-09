@@ -41,7 +41,6 @@ var parseTime = d3.timeParse('%Y/%m %I:%M%p');
 
 
 function renderTimeLine() {
-
 	timeX.domain(d3.extent(timeData, function (d) { return parseT(d.key); }));
 
 	timeY.domain(d3.extent(timeData, function (d) { return d.value.total; }));

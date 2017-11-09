@@ -37,7 +37,6 @@ var correctCenter = {
 
 // Seriously need iso codes instead but timeconstrains mate
 function getName(country) {
-	// console.log(country);
 	switch(country) {
 		case 'United Kingdom of Great Britain and Northern Ireland':
 			return 'United Kingdom';
@@ -55,8 +54,8 @@ function getName(country) {
 			return 'Tanzania';
 		case 'Serbia and Kosovo (S/RES/1244 (1999))': // No hard feelings Kosovo
 			return 'Serbia';
-		case 'Serbia and Kosovo: S/RES/1244 (1999)':
-			return 'Serbia';
+		// case 'Serbia and Kosovo: S/RES/1244 (1999)': is double
+			// return 'Serbia';
 		
 		// case 'Dem. People's Rep. of Korea':
 		case "Lao People's Dem. Rep.":
@@ -85,9 +84,6 @@ function getName(country) {
 			return 'Antigua and Barb.';
 		case 'Saint Vincent and the Grenadines':
 			return 'St. Vin. and Gren..';
-
-
-
 			
 		default: 
 			return country;
@@ -98,7 +94,7 @@ function getName(country) {
 
 var toIgnore = [
 	'Canada', 'Australia', 'New Zealand', 'Japan', 'Rep. of Korea', 'Turkey',
-	'Stateless', 'Various/unknown', 'Tibetan', 'USA (EOIR)', 'USA (INS/DHS)', "Dem. People's Rep. of Korea", 'Viet Nam', 'Jamaica', 'Chile', 'Brazil', 'Colombia', 'Cuba', 'United States of America', 'Honduras', 'El Salvador', 'Mexico', 'Dominican Rep.', 'Venezuela', 'Guatemala', 'Solomon Islands', 'Peru', 'Lao', 'Sao Tome and Principe', 'Ecuador', 'Argentina', 'Bahamas'
+	'Stateless', 'Various/unknown', 'Tibetan', 'USA (EOIR)', 'USA (INS/DHS)', "Dem. People's Rep. of Korea", 'Viet Nam', 'Jamaica', 'Chile', 'Brazil', 'Colombia', 'Cuba', 'United States of America', 'Honduras', 'El Salvador', 'Mexico', 'Dominican Rep.', 'Venezuela', 'Guatemala', 'Solomon Islands', 'Peru', 'Lao', 'Sao Tome and Principe', 'Ecuador', 'Argentina', 'Bahamas', 'Serbia and Kosovo: S/RES/1244 (1999)'
  ]
 
 
