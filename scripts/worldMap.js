@@ -8,7 +8,7 @@ var mapCon = d3.select('#svg-map');
 // var mapHeight = winHeight + 400;
 
 var world = mapCon
-	.attr('viewBox', `0 0 ${winWidth - 200} ${winHeight + 400}`)
+	.attr('viewBox', `0 0 ${winWidth - 200} ${winHeight + 600}`)
 	.attr('width', winWidth)
 	.attr('height', winHeight)
 	.append('g')
@@ -80,8 +80,8 @@ function loadMap(err, res) {
 			return `country`;
 		})
 		.attr('d', mapPath)
-	.on('mouseenter', handleCountryEnter)
-	.on('mouseleave', handleCountryLeave)
+		.on('mouseenter', handleCountryEnter)
+		.on('mouseleave', handleCountryLeave)
 
 	function handleCountryEnter(d) {
 		var cName = d.properties.NAME;
@@ -95,13 +95,13 @@ function loadMap(err, res) {
 			.attr('y', d => getCenterY(cName))
 			.attr('dy', 2)
 			.attr('text-anchor', 'middle')
-			.attr('font-size', 16)
+		// .attr('font-size', 20)
 			// .attr('fill', '#000')
 	}
 
 	function handleCountryLeave(d) {
 		var cNameC = d.properties.ADM0_A3;
-		console.log(cNameC);
+		// console.log(cNameC);
 		// console.log(cName);
 		world.select(`.${cNameC}`)
 			.remove();
@@ -303,6 +303,7 @@ async function mapJourney(numb) {
 				console.log('data', d, i);
 				// console.log(journeyRoute);
 				console.log(journeyData[numb].story);
+				showStory();
 				return showStoryTip(journeyData[numb].story[i])
 			})
 			// .on('mouseleave', hideStoryTip)
@@ -381,6 +382,8 @@ async function mapJourney(numb) {
 
 			// Need another check when new data and different data comes in 
 
+		} else {
+			// zoomWorld(); and zoom out lines and hotspots
 		}
 	}
 
@@ -478,7 +481,7 @@ function hideStoryTip(d) {
 =================*/
 function zoomWorld(point, location) {
 	var strokeW = location ? 1 : 2.5;
-	var fontSize = location ? 6 : 16;
+	// var fontSize = location ? 6 : 20;
 
 	var transitionWorld = world.transition()
 		.duration(transDur);
@@ -488,9 +491,10 @@ function zoomWorld(point, location) {
 		.selectAll('.country')
 		.style('stroke-width', strokeW)
 		
-	transitionWorld
-		.selectAll('.country-label')
-		.attr('font-size', fontSize)
+	// transitionWorld
+	// 	.selectAll('.country-adm')
+	// 	.style('font-size', 1)
+		// .attr('font-size', fontSize)
 }
 
 // Inspired from https://stackoverflow.com/questions/20409484/d3-js-zoomto-point-in-a-2d-map-projection

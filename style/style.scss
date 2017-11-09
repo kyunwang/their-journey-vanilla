@@ -32,7 +32,7 @@ body {
 	margin: 0;
 	// margin: var(--def-margin);
 	padding: 0;
-	font-family: sans-serif;
+	// font-family: sans-serif;
 	// background-color: rgba(0, 0, 0, .7);
 }
 
@@ -55,6 +55,7 @@ svg {
 =================*/
 
 .map-con {
+	position: relative;
 	// height: 100%;
 	text-align: center; // margin: var(--def-margin);
 	// border: 1px solid #000;
@@ -72,12 +73,102 @@ svg {
 
 .country-adm {
 	pointer-events: none;
+	font-weight: 100;
+	font-size: 20;
 }
 
 // 
 .trajectory {
 	stroke: red;
 	stroke-width: 2;
+}
+
+
+.menu {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 25%;
+	height: 100%;
+	// height: 100vh;
+	background-color: red;
+
+	// transform: translate(-100%, 0);
+	
+	// transform: translate(90%, 0);
+	
+	transition: transform 1s ease ;
+
+	&.active {
+	transform: translate(0, 0);
+	
+	}
+
+	button {
+		align-self: flex-end;
+		margin-bottom: 1.5em;
+	}
+
+	ul {
+		padding: 1em 2em;
+		padding-left: 3em;
+	}
+
+	li {
+		font-size: 2em;
+		text-align: left;
+		list-style: none;
+		line-height: 1.2em;
+
+		&:not(:first-of-type) {
+			margin-top: .8em;
+		}
+
+		&:hover {
+			color: yellow;
+		}
+		&:hover.disabled {
+			color: #a3a3a3;
+		}
+	}
+
+	.disabled {
+		color: #a3a3a3;
+	}
+}
+
+.menu-btn {
+	position: absolute;
+	height: 100%;
+	width: 3em;
+	// background-color: blue;
+	
+
+	p {
+		// height: 100%;
+		// height: 100px;
+		font-size: 1.2em;
+		font-weight: 100;
+		width: 400px;
+		// width: 100%;
+		position: absolute;
+		top: 50%;
+		color: #fff;
+		// transform: translateY(-50%) rotate(-90deg);
+		transform: translateY(-50%) translateX(-45%) rotate(-90deg);
+		margin: 0 auto;
+	}
+}
+
+.menu-list {
+
+}
+
+.hide {
+	display: none;
 }
 
 

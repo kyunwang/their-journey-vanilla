@@ -2,6 +2,14 @@
 // d3.text('../data/all_refugees12.csv', loadRefugee);
 // d3.text('../data/all_refugees12-17.csv', loadRefugee);
 
+// Animating the map menubtn
+d3.select('.menu-btn').on('click', function() {
+	d3.select('.menu')
+		.classed('active', function() {
+			return !this.classList.contains('active')
+		});
+})
+
 async function loadRefugee(err, ref, test, world) {
 	if (err) return err;
 
