@@ -9,7 +9,9 @@ function renderFilter() {
 	// Remove duplicates
 	filterKeys = filterKeys.filter((d, i, self) => i === self.indexOf(d));
 
-	filterKeys.unshift('all')
+	// filterKeys.unshift('all');
+	// filterKeys.unshift('None');
+	filterKeys.unshift('Select a date');
 
 
 	d3.select('#filter-list')
@@ -28,7 +30,10 @@ function renderFilter() {
 		console.log('filter selected: ',this.value);
 
 		// console.log(mapTraject);
-		d3.selectAll('.refbar-con').remove('.refbar-con'); // Remove the bars as it does not update otherwise
+		d3.selectAll('.refbar-con')
+			.remove('.refbar-con');
+			// Remove the bars as it does not update otherwise
+			// Well it actually layers itself but still
 
 		mapTraject(this.value);
 

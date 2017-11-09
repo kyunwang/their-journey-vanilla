@@ -155,9 +155,11 @@ function centerPoints(data) {
 // Showing the route of refugees.
 function mapTraject(date) {
 	resetAll();
+	if (date == 'Select a date') return;
 
 	// Filter the data
-	var filterData = (date !== 'all' && date !== undefined) ? refugeeData.filter(d => d.Datum === date) : refugeeData;
+	// var filterData = (date !== 'all' && date !== undefined) ? refugeeData.filter(d => d.Datum === date) : refugeeData;
+	var filterData = refugeeData.filter(d => d.Datum === date);
 
 	// console.log(date)
 	// console.log(filterData)
