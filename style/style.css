@@ -15,7 +15,8 @@ Using css vars in scss xd
 Mainly using scss for nesting here. Trying my hand in css vars
 =================*/
 :root {
-  --def-margin: 1.5em; }
+  --def-margin: 1.5em;
+  --sec-text-color: #a3a3a3; }
 
 html {
   font-family: "open sans", "helvetica", "sans-serif";
@@ -27,6 +28,9 @@ body {
   padding: 0; }
 
 ::-webkit-scrollbar {
+  display: none; }
+
+.hide {
   display: none; }
 
 /*=================
@@ -76,6 +80,9 @@ body {
   .journey-detail span {
     font-weight: 300; }
 
+/*=================
+=== Menu + story
+=================*/
 .menu {
   overflow: scroll;
   display: flex;
@@ -107,9 +114,9 @@ body {
     .menu li:hover {
       color: yellow; }
     .menu li:hover.disabled {
-      color: #a3a3a3; }
+      color: var(--sec-text-color); }
   .menu .disabled {
-    color: #a3a3a3; }
+    color: var(--sec-text-color); }
 
 .menu-btn {
   position: absolute;
@@ -129,8 +136,10 @@ body {
   padding-right: 2em;
   padding-left: 2.8em;
   text-align: start; }
+  .story-content .credits {
+    color: var(--sec-text-color); }
 
-.hide {
+#story-end {
   display: none; }
 
 /*=================

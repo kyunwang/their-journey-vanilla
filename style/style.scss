@@ -19,6 +19,7 @@ Mainly using scss for nesting here. Trying my hand in css vars
 
 :root {
 	--def-margin: 1.5em;
+	--sec-text-color: #a3a3a3;
 }
 
 
@@ -29,17 +30,18 @@ html {
 
 body {
 	height: 100%; // background-color: #303030;
-	margin: 0;
-	// margin: var(--def-margin);
-	padding: 0;
-	// font-family: sans-serif;
+	margin: 0; // margin: var(--def-margin);
+	padding: 0; // font-family: sans-serif;
 	// background-color: rgba(0, 0, 0, .7);
 }
 
-::-webkit-scrollbar { 
-	display: none; 
+::-webkit-scrollbar {
+	display: none;
 }
 
+.hide {
+	display: none;
+}
 
 
 /*=================
@@ -54,13 +56,13 @@ svg {
 }
 
 
+
 /*=================
 === Worldmap
 =================*/
 
 .map-con {
-	position: relative;
-	// height: 100%;
+	position: relative; // height: 100%;
 	text-align: center; // margin: var(--def-margin);
 	// border: 1px solid #000;
 	overflow: hidden;
@@ -68,8 +70,7 @@ svg {
 }
 
 .country {
-	fill: #fff;
-	// fill: transparent;
+	fill: #fff; // fill: transparent;
 	stroke: rgba(0, 127, 255, .5); // stroke: #007fff;
 	// stroke-width: 1.5;
 	stroke-width: 2.5;
@@ -86,6 +87,7 @@ svg {
 	stroke: red;
 	stroke-width: 2;
 }
+
 
 /*=================
 === Journey
@@ -119,10 +121,13 @@ svg {
 
 
 
-.menu {
+/*=================
+=== Menu + story
+=================*/
 
+.menu {
 	overflow: scroll;
-	
+
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -132,13 +137,9 @@ svg {
 	width: 30%;
 	height: 100%;
 
-	background-color: red;
-
-	// transform: translate(-100%, 0);
-	
+	background-color: red; // transform: translate(-100%, 0);
 	// transform: translate(90%, 0);
-	
-	transition: transform 1s ease ;
+	transition: transform 1s ease;
 
 	&.active {
 		transform: translate(0, 0);
@@ -169,12 +170,12 @@ svg {
 			color: yellow;
 		}
 		&:hover.disabled {
-			color: #a3a3a3;
+			color: var(--sec-text-color);
 		}
 	}
 
 	.disabled {
-		color: #a3a3a3;
+		color: var(--sec-text-color);		
 	}
 }
 
@@ -182,20 +183,14 @@ svg {
 	position: absolute;
 	height: 100%;
 	width: 3em;
-	// background-color: blue;
-	
 
 	p {
-		// height: 100%;
-		// height: 100px;
 		font-size: 1.2em;
 		font-weight: 100;
 		width: 400px;
-		// width: 100%;
 		position: absolute;
 		top: 50%;
 		color: #fff;
-		// transform: translateY(-50%) rotate(-90deg);
 		transform: translateY(-50%) translateX(-45%) rotate(-90deg);
 		margin: 0 auto;
 	}
@@ -204,17 +199,19 @@ svg {
 .story-content {
 	padding-right: 2em;
 	padding-left: 2.8em;
-	// padding: 0 2.8em;
-	text-align: start;	
+	text-align: start;
+
+	.credits {
+		color: var(--sec-text-color);
+	}
 }
 
-.menu-list {
-
-}
-
-.hide {
+#story-end {
 	display: none;
 }
+
+.menu-list {}
+
 
 
 /*=================
@@ -223,8 +220,7 @@ svg {
 
 .time-con {
 	// margin-top: 1em;
-	overflow: hidden;
-	// background: rgba(0, 0, 0, .4);
+	overflow: hidden; // background: rgba(0, 0, 0, .4);
 	p {
 		position: absolute;
 	}
@@ -248,7 +244,7 @@ svg {
 .time-text {
 	font-size: 1.5em;
 	fill: rgba(0, 0, 0, .1);
-	letter-spacing: .2em;	
+	letter-spacing: .2em;
 }
 
 #time-count-shower {
@@ -258,6 +254,7 @@ svg {
 }
 
 
+
 /*=================
 === Multi timeline
 =================*/
@@ -265,6 +262,7 @@ svg {
 .multi-time-con {
 	height: 200px;
 }
+
 
 /*=================
 === Stuff to check
@@ -293,15 +291,13 @@ svg {
 }
 
 
+
 /*=================
 === Loader
 =================*/
 
-
 #loader {
-	display: none;
-
-	// display: flex;
+	display: none; // display: flex;
 	align-items: center;
 	justify-content: center;
 	position: fixed;

@@ -37,6 +37,9 @@ projection
 var mapZScale = 4;
 var scaleMulti = mapZScale - 1;
 
+// Keeping track of the journey
+var journeyRoute = [];
+
 
 function loadMap(err, res) {
 	if (err) return err;
@@ -236,15 +239,13 @@ function mapTraject(date) {
 
 
 async function mapJourney(numb) {
-
-	var journeyRoute = [];
 	var checkpoint;
 
 	// await journeyData.map(data => {
 	journeyData.map(data => {
 		data.journey.map((country, i) => {
 			journeyData[numb].journeyCoords.push(countryCenter[country]);
-			// journeyRoute.push(countryCenter[country]);
+			journeyRoute.push(countryCenter[country]);
 			// console.log(country);
 		})
 	})
@@ -291,7 +292,7 @@ async function mapJourney(numb) {
 
 	// Update the journey spots/stops
 	function updateHotspot(point, routeItem) {
-		var updateJourney = mapCon
+		var updateJourney = journeyDestinations
 			.selectAll('.spots-stop')
 			.data(journeyRoute)
 			
@@ -399,7 +400,7 @@ async function mapJourney(numb) {
 
 			updateHotspot();
 			zoomWorld(); // and zoom out lines and hotspots
-			showStory(journeyData[numb].story[journeyRoute.length])
+			showStory(journeyData[numb].story[journeyRoute.length], true)
 		}
 	}
 
@@ -492,19 +493,54 @@ function getRefHtml(n, d) {
 // function hideStoryTip(d) {
 // 	storyTip.hide();
 // }
+d3.select('#story-end')
+	.on('click', function() {
+		console.log('ednignd');
+		// Reset the journeyRoute
+		journeyRoute = [];
 
-
-function showStory(story) {
-	if (story) {
-		d3.select('.menu-list')
-			.classed('hide', true);
-	} else {
+		// Shgow the menu conent again
 		d3.select('.menu-list')
 			.classed('hide', false);
+
+		// Remove the story content
+		d3.select('.story-content')
+			.html(null)
+
+		// Hide the reset button
+		d3.select(this)
+			.style('display', 'none')
+
+
+		// Remove all hotspots/stops
+		d3.selectAll('.spots-stop')
+			.remove();
+
+		// Remove the journey line
+		d3.select('.journey-line')
+			.remove();
+	})
+
+
+// 	d3.select('#story-end')
+// 	.style('display', 'block');
+
+// d3.select('.menu-list')
+// 	.classed('hide', false);
+// 	return;
+
+function showStory(story, end) {
+	
+	if (end) {
+		d3.select('#story-end')
+			.style('display', 'block');
 	}
 
 	d3.select('.story-content')
 		.html(story)
+	
+	d3.select('.menu-list')
+		.classed('hide', true);
 }
 
 /*=================
