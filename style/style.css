@@ -16,7 +16,13 @@ Mainly using scss for nesting here. Trying my hand in css vars
 =================*/
 :root {
   --def-margin: 1.5em;
-  --sec-text-color: #a3a3a3; }
+  --bg-color: #2a2a2a;
+  --sec-bg-color: #a3a3a3;
+  --primary-color: #f3f3f3;
+  --primary-color-dark: #3b3b3b;
+  --primary-color-alpha: rgba(244, 244, 244, 0.6);
+  --sec-text-color: #a3a3a3;
+  --text-disabled: #cfcfcf; }
 
 html {
   font-family: "open sans", "helvetica", "sans-serif";
@@ -25,7 +31,12 @@ html {
 body {
   height: 100%;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  background-color: var(--bg-color); }
+
+select {
+  height: 29px;
+  width: 12em; }
 
 ::-webkit-scrollbar {
   display: none; }
@@ -45,18 +56,24 @@ body {
   overflow: hidden; }
 
 .country {
-  fill: #fff;
+  fill: var(--primary-color-dark);
   stroke: rgba(0, 127, 255, 0.5);
   stroke-width: 2.5; }
 
 .country-adm {
   pointer-events: none;
   font-weight: 100;
-  font-size: 20; }
+  font-size: 20;
+  fill: var(--primary-color); }
 
 .trajectory {
-  stroke: red;
+  stroke: var(--primary-color-alpha);
   stroke-width: 2; }
+
+#filter-list {
+  position: absolute;
+  top: 2em;
+  right: 5.5em; }
 
 /*=================
 === Journey
@@ -66,19 +83,14 @@ body {
   stroke: red;
   stroke-width: 2; }
 
-.journey-detail {
+.refugee-bar {
   flex: 1;
   max-width: 30em;
-  margin: 0.8em 0;
-  border: 1px solid gold;
+  border: 1px solid var(--primary-color);
   border-radius: 2px;
-  padding: 1em;
-  background-color: #3a3a3a;
-  color: #fff; }
-  .journey-detail p {
-    margin-bottom: 0.3em; }
-  .journey-detail span {
-    font-weight: 300; }
+  padding: 0 1em;
+  background-color: var(--bg-color);
+  color: var(--primary-color); }
 
 /*=================
 === Menu + story
@@ -93,7 +105,8 @@ body {
   right: 0;
   width: 30%;
   height: 100%;
-  background-color: red;
+  background-color: var(--primary-color);
+  transform: translate(88%, 0);
   transition: transform 1s ease; }
   .menu.active {
     transform: translate(0, 0);
@@ -108,15 +121,20 @@ body {
     font-size: 2em;
     text-align: left;
     list-style: none;
-    line-height: 1.2em; }
+    line-height: 1.2em;
+    border-bottom: 0 solid var(--sec-text-color);
+    transition: border-bottom 200ms ease-in; }
     .menu li:not(:first-of-type) {
       margin-top: .8em; }
     .menu li:hover {
-      color: yellow; }
+      color: var(--sec-text-color);
+      border-bottom: 3px solid var(--sec-text-color); }
     .menu li:hover.disabled {
-      color: var(--sec-text-color); }
+      color: var(--text-disabled);
+      border: none; }
   .menu .disabled {
-    color: var(--sec-text-color); }
+    color: var(--text-disabled);
+    text-decoration: line-through; }
 
 .menu-btn {
   position: absolute;
@@ -128,24 +146,46 @@ body {
     width: 400px;
     position: absolute;
     top: 50%;
-    color: #fff;
+    color: var(--primary-color-dark);
     transform: translateY(-50%) translateX(-45%) rotate(-90deg);
     margin: 0 auto; }
+    .menu-btn p:hover {
+      color: var(--sec-text-color); }
 
 .story-content {
   padding-right: 2em;
   padding-left: 2.8em;
-  text-align: start; }
+  text-align: start;
+  color: var(--primary-color-dark); }
   .story-content .credits {
     color: var(--sec-text-color); }
 
 #story-end {
   display: none; }
 
+.story-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 2em; }
+  .story-buttons button {
+    height: 3em;
+    width: 100%;
+    margin: 0;
+    outline: none;
+    background: none;
+    border: none;
+    border-bottom: 0 solid var(--primary-color-dark);
+    transition: border-bottom 200ms ease-in; }
+    .story-buttons button:hover {
+      border-bottom: 5px solid var(--primary-color-dark); }
+    .story-buttons button:not(:first-of-type) {
+      width: 50%; }
+
 /*=================
 === Timeline
 =================*/
 .time-con {
+  background: var(--sec-bg-color);
   overflow: hidden; }
   .time-con p {
     position: absolute; }
@@ -156,20 +196,26 @@ body {
 
 .refugee-line {
   fill: none;
-  stroke: #000;
+  stroke: var(--primary-color);
   stroke-linejoin: round;
   stroke-linecap: round;
-  stroke-width: 2.5; }
+  stroke-width: 2.5;
+  opacity: .7; }
 
 .time-text {
   font-size: 1.5em;
-  fill: rgba(0, 0, 0, 0.1);
+  fill: var(--primary-color-alpha);
+  opacity: .5;
   letter-spacing: .2em; }
 
 #time-count-shower {
   font-size: 5em;
   font-weight: 700;
   letter-spacing: 1em; }
+
+.mouse-line {
+  stroke: var(--primary-color-alpha);
+  stroke-width: 1.5px; }
 
 /*=================
 === Multi timeline
@@ -208,7 +254,7 @@ body {
   top: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #fff; }
+  background-color: var(--primary-color); }
   #loader p {
     text-align: center;
     font-size: 2em; }
