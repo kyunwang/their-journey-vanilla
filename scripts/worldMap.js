@@ -2,10 +2,6 @@
 === Global vars
 =================*/
 var mapCon = d3.select('#svg-map');
-// var mapCon = d3.select('#svg-con');
-
-// var mapWidth = winWidth - 200;
-// var mapHeight = winHeight + 400;
 
 var world = mapCon
 	.attr('viewBox', `0 0 ${winWidth - 200} ${winHeight + 600}`)
@@ -26,11 +22,9 @@ var mapPath = d3.geoPath()
 	.pointRadius(1.5);
 
 projection
-	// .center([-100, 40.5])
 	.center([0, la])
 	.rotate([-lo, 0])
 	.scale(winWidth * 0.65)
-	// .scale(200)
 	.translate([winWidth / 4, winHeight / 1.5]);
 
 // Vars for zooming
@@ -41,6 +35,31 @@ var scaleMulti = mapZScale - 1;
 var journeyRoute = [];
 
 
+/*=================
+=== Global selections
+=================*/
+
+d3.selectAll('.menu-list li')
+	.on('click', function() {
+		if (this.classList.contains('disabled')) return;
+		mapJourney(this.dataset.storyId); // Start story based on id
+	});
+
+// End the story
+d3.select('#story-end')
+	.on('click', function() {
+		// Hide the reset button
+		d3.select(this)
+			.style('display', 'none');
+
+		resetAll(); // Reset the data/story data
+	});
+
+/*=================
+=== Start functions
+=================*/
+
+// Mapping the map
 function loadMap(err, res) {
 	if (err) return err;
 
@@ -110,26 +129,12 @@ function loadMap(err, res) {
 			.remove();
 	}
 
-	// world.selectAll('text')
-	// 	.data(directionMapping)
-	// 	.enter()
-	// 	.append('text')
-	// 		.text(d => d.name)
-	// 		.attr('class', 'country-label')
-	// 		.attr('x', d => getCenterX(d.name))
-	// 		.attr('y', d => getCenterY(d.name))
-	// 		.attr('dy', 2)
-	// 		.attr('text-anchor', 'middle')
-	// 		.attr('font-size', 16)
-			
-			
-
 	// centerPoints(); // Render dots on all the center of the countries
 	// mapTraject(); // Render the course of all the refugees
-	mapJourney(0); // Select the first story (we only got one atm)
+	// mapJourney(0); // Select the first story (we only got one atm)
 }
 
-
+// Mapping a dot on the center of countries
 function centerPoints(data) {
 	var mapCenter = mapCon.append('g')
 		.attr('class', 'country-center')
@@ -147,8 +152,7 @@ function centerPoints(data) {
 		.attr('stroke', '#fff')
 }
 
-
-
+// Showing the route of refugees.
 function mapTraject(date) {
 	resetAll();
 
@@ -239,20 +243,20 @@ function mapTraject(date) {
 
 }
 
-
-async function mapJourney(numb) {
+// The journey/story function
+async function mapJourney(storyId) {
 	var checkpoint;
 
 	// await journeyData.map(data => {
 	journeyData.map(data => {
 		data.journey.map((country, i) => {
-			journeyData[numb].journeyCoords.push(countryCenter[country]);
+			journeyData[storyId].journeyCoords.push(countryCenter[country]);
 			// journeyRoute.push(countryCenter[country]);
 			// console.log(country);
 		})
 	})
 
-	// journeyRoute.push(journeyData[numb].journeyCoords[0]);
+	// journeyRoute.push(journeyData[storyId].journeyCoords[0]);
 	// console.log(journeyRoute);
 
 	var pathLine = d3.line()
@@ -268,7 +272,7 @@ async function mapJourney(numb) {
 		.datum(journeyRoute)
 		.attr('class', 'journey-line')
 		.attr('d', pathLine(journeyRoute))
-		// .attr('d', pathLine(journeyData[numb].journeyCoords))
+		// .attr('d', pathLine(journeyData[storyId].journeyCoords))
 		.transition()
 		.duration(transDur)
 		.attrTween('stroke-dasharray', function (d) { // Tween source: https://www.yerich.net/blog/bezier-curve-animation-using-d3
@@ -281,15 +285,17 @@ async function mapJourney(numb) {
 
 
 	// Add function for handleing the advent of the journey
-	d3.select('#plus').on('click', addJourneyRoute)
-	d3.select('#minus').on('click', removeJourneyRoute)
+	d3.select('#plus').on('click', addJourneyRoute);
+	d3.select('#minus').on('click', removeJourneyRoute);
 
-
-
+	
 	var journeyDestinations = mapCon.append('g')
-		.attr('class', 'spots-con')
-	// .selectAll('.me')
-	// .data(journeyRoute)
+	.attr('class', 'spots-con')
+	
+	
+	// Start the journey on select story
+	// After all previous data/vars have loaded
+	addJourneyRoute();
 
 
 	// Update the journey spots/stops
@@ -305,8 +311,8 @@ async function mapJourney(numb) {
 			.on('mouseenter', (d, i) => {
 				console.log('data', d, i);
 				// console.log(journeyRoute);
-				console.log(journeyData[numb].story);
-				showStory(journeyData[numb].story[i]);
+				console.log(journeyData[storyId].story);
+				showStory(journeyData[storyId].story[i]);
 			})
 			// .on('mouseleave', hideStoryTip)
 				.attr('class', 'spots-stop')
@@ -349,7 +355,7 @@ async function mapJourney(numb) {
 			d3.selectAll('.refbar-con').remove();
 		}
 
-		var jCoords = journeyData[numb].journeyCoords;
+		var jCoords = journeyData[storyId].journeyCoords;
 
 
 		// Checking wether to add route
@@ -381,7 +387,7 @@ async function mapJourney(numb) {
 
 			updateHotspot(point, routeItem);
 			zoomWorld(point, routeItem);
-			showStory(journeyData[numb].story[journeyRoute.length - 1])
+			showStory(journeyData[storyId].story[journeyRoute.length - 1])
 
 			// Need another check when new data and different data comes in 
 
@@ -402,12 +408,12 @@ async function mapJourney(numb) {
 
 			updateHotspot();
 			zoomWorld(); // and zoom out lines and hotspots
-			showStory(journeyData[numb].story[journeyRoute.length], true)
+			showStory(journeyData[storyId].story[journeyRoute.length], true)
 		}
 	}
 
 	function removeJourneyRoute() {
-		var jCoords = journeyData[numb].journeyCoords;
+		var jCoords = journeyData[storyId].journeyCoords;
 
 		// Checking wether to remove route
 		if (journeyRoute.length > 0) {
@@ -438,16 +444,14 @@ async function mapJourney(numb) {
 
 			updateHotspot(point, routeItem);
 			zoomWorld(point, routeItem);
-			showStory(journeyData[numb].story[journeyRoute.length - 1]);
-			if (!routeItem) {
+			showStory(journeyData[storyId].story[journeyRoute.length - 1]);
+
+			if (!routeItem) { // if there are no items. reset
 				resetAll();
 			}
 		}
 	}
-
-
 }
-
 
 
 
@@ -479,66 +483,34 @@ function getRefHtml(n, d) {
 
 
 /*=================
-=== Hotspot tooltip
+=== Story functions
 =================*/
 
-// var storyTip = d3.tip()
-// 	.attr('class', 'journey-detail')
-// 	.offset([-20, 0]);
+// Reset all data
+function resetAll() {
+	// Reset the journeyRoute		
+	journeyRoute = [];
 
-// mapCon.call(storyTip);
+	// Show the menu conent again
+	d3.select('.menu-list')
+		.classed('hide', false);
 
-// function showStoryTip(story) {
-// 	storyTip.html(story); // Set the content to be shown
-// 	storyTip.show();
-// }
+	// Remove the story content
+	d3.select('.story-content')
+		.html(null);
 
-// function hideStoryTip(d) {
-// 	storyTip.hide();
-// }
-d3.select('#story-end')
-	.on('click', function() {
-		// Hide the reset button
-		d3.select(this)
-			.style('display', 'none');
+	// Remove all hotspots/stops
+	d3.selectAll('.spots-stop')
+		.remove();
 
-		resetAll();
-	})
+	// Remove the journey line
+	d3.select('.journey-line')
+		.attr('d', null);
 
+}
 
-	// Reset all data
-	function resetAll() {
-		// Reset the journeyRoute		
-		journeyRoute = [];
-
-		// Show the menu conent again
-		d3.select('.menu-list')
-			.classed('hide', false);
-
-		// Remove the story content
-		d3.select('.story-content')
-			.html(null);
-
-		// Remove all hotspots/stops
-		d3.selectAll('.spots-stop')
-			.remove();
-
-		// Remove the journey line
-		d3.select('.journey-line')
-			.attr('d', null)
-
-	}
-
-
-// 	d3.select('#story-end')
-// 	.style('display', 'block');
-
-// d3.select('.menu-list')
-// 	.classed('hide', false);
-// 	return;
 
 function showStory(story, end) {
-	
 	if (end) {
 		d3.select('#story-end')
 			.style('display', 'block');
