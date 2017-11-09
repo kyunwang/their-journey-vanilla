@@ -182,7 +182,9 @@ svg {
 
 		border-bottom: 0 solid var(--sec-text-color);
 
-		transition: border-bottom 200ms ease-in;
+		transition:
+			border-bottom 200ms ease-in,
+			color 200ms ease-in;
 
 		&:not(:first-of-type) {
 			margin-top: .8em;
@@ -191,8 +193,8 @@ svg {
 		&:hover {
 			color: var(--sec-text-color);
 			border-bottom: 3px solid var(--sec-text-color);
-		
 		}
+
 		&:hover.disabled {
 			color: var(--text-disabled);
 			border: none;
@@ -222,6 +224,8 @@ svg {
 		transform: translateY(-50%) translateX(-45%) rotate(-90deg);
 		margin: 0 auto;
 
+		transition: color 200ms ease-in;
+
 		&:hover {
 			color: var(--sec-text-color);
 		}
@@ -244,7 +248,7 @@ svg {
 	display: none;
 }
 
-.menu-list {}
+// .menu-list {}
 
 .story-buttons {
 	display: flex;
