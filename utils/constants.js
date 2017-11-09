@@ -1,7 +1,8 @@
 // var winWidth = window.innerWidth;
 var winWidth = document.body.clientWidth;
 // var winHeight = window.innerHeight - 120;
-var winHeight = document.body.clientHeight - 120;
+// var winHeight = document.body.clientHeight - 120;
+var winHeight = document.body.clientHeight;
 
 // Data vars
 var refugeeData;

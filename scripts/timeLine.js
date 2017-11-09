@@ -64,12 +64,11 @@ function renderTimeLine() {
 		.attr('d', myLine);
 
 
-	// to chagne
-	refugeeLine.append('g')
-		.attr('transform', `translate(0, ${timeHeight})`)
-		.call(d3.axisBottom(timeX))
-		.select('.domain')
-		.remove();
+	// refugeeLine.append('g')
+	// 	.attr('transform', `translate(0, ${timeHeight})`)
+	// 	.call(d3.axisBottom(timeX))
+	// 	.select('.domain')
+	// 	.remove();
 
 
 	// refugeeLine.selectAll('.my')
@@ -87,13 +86,20 @@ function renderTimeLine() {
 		.attr('class', 'time-text')
 		.attr('transform', `translate(${timeWidth/2}, ${timeHeight/2 - 50})`)
 		.attr('text-anchor', 'middle')
-		.text('REFUGEES')
+		.text('REFUGEES FLED')
 
 	timeCon.append('text')
 		.attr('id', 'time-count-shower')
 		.attr('class', 'time-text')		
 		.attr('dy', 20)
 		.attr('transform', `translate(${timeWidth/2}, ${timeHeight/2})`)
+		.attr('text-anchor', 'middle')
+		.text('')
+		
+	timeCon.append('text')
+		.attr('id', 'time-date')
+		.attr('class', 'time-text')		
+		.attr('transform', `translate(${timeWidth/2}, ${timeHeight/2 + 50})`)
 		.attr('text-anchor', 'middle')
 		.text('')
 
@@ -141,7 +147,7 @@ function renderTimeLine() {
 		.attr('height', timeHeight)
 		.attr('fill', 'none')
 		.attr('pointer-events', 'all')
-		.on('mouseout', function () { // on mouse out hide line, circles and text
+		.on('mouseout', function (d) { // on mouse out hide line, circles and text
 			d3.select('.mouse-line')
 				.style('opacity', '0');
 			// d3.selectAll('.mouse-per-line circle')
@@ -191,19 +197,16 @@ function renderTimeLine() {
 						else break; //position found
 					}
 
-					
-					// d3.select(this)
-					// 	.select('text')
-					// 	.attr('fill', d => {
-					// 		console.log(1212, d);
-					// 		// console.log(this);
-					// 		// console.log(timeY.invert(pos.y).toFixed(0));
-					// 		return 'red'
-					// 	})
-					// 	.text(timeY.invert(pos.y).toFixed(0));
-					
+					// Updating the text
 					d3.select('#time-count-shower')
-						.text(timeY.invert(pos.y).toFixed(0));
+						// .text(timeY.invert(pos.y).toFixed(0));
+						.text((timeY.invert(pos.y).toFixed(0) / moment(timeX.invert(pos.x)).daysInMonth()).toFixed(0));
+
+						// console.log(moment(timeX.invert(pos.x)).daysInMonth());
+
+					d3.select('#time-date')
+						.text(`IN ${moment(timeX.invert(pos.x)).format('D MMM YYYY')}`);
+						// .text(`IN ${moment(timeX.invert(pos.x)).format('MMM YYYY')}`);
 
 					return 'translate(' + mouse[0] + ',' + pos.y + ')';
 				});
