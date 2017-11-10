@@ -326,7 +326,7 @@ async function mapJourney(storyId) {
 				.attr('r', 0)
 				.attr('cx', d => projection(d)[0])
 				.attr('cy', d => projection(d)[1])
-				.attr('fill', 'blue')
+				.attr('fill', '#f3f3f3')
 				.transition()
 				.duration(transDur)			
 				.attr('r', 5)
@@ -340,9 +340,9 @@ async function mapJourney(storyId) {
 			.transition()
 			.duration(transDur)	
 			.attr('transform', () => zoomPoint(point, routeItem))
-			.attr('fill', '#fff')
-			// .attr('fill', 'transparent')
-			.attr('stroke', 'blue')
+			// .attr('fill', '#fff')
+			.attr('fill', '#3b3b3b')
+			.attr('stroke', '#f3f3f3')
 			// .on('mouseenter', () => this.style('fill', 'blue'))
 
 
