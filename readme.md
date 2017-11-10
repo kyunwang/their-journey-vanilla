@@ -6,14 +6,13 @@
 A visualisation about refugees in the area of Europe and around.
 Follow a journey of a refugee too while your are at it.
 
-Partly based on [own project][base-pj]
-
 *All the code sources used in the code are in the files themselves as comments right next to the code.*
+
+Partly based on [own project][base-pj]
 
 [Attempt using React.js with D3.js][react-v]
 
 **Tools used**
-The tools used:
 - D3.js
 - D3-tip.js
 - Topojson.js
@@ -21,16 +20,39 @@ The tools used:
 
 # TOC
 - [Concept](#concept)
+- [Roadmap](#roadmap)
 - [Data](#data)
 - [Data cleaning and modifying](#data-cleaning-and-modifying)
 - [Features and Working](#features-and-working)
-- [Bugs](#bugs)
+- [Known Issues](#known-issues)
 - [License](#license)
 
 ## Concept
 The goal of this visualisation is to give the user a overview of the refugee flow in and around Europe. By showing the traject of their starting point(country of origin) to their destination(country of destination) the user can get a rough spacial overview of of the (minimal) absolute distance the refugee has to cross.
 
 By giving showing hard numbers of the amount of refugees fled over time. One can get a rough understanding of how many people are fleeing for their lives.
+
+*Check the [sketches][sketches-link]*
+
+## Roadmap
+Our defined must, should and nice to haves to get done in the time given.
+
+### Must have
+The minumum features needed to be a MVC:
+- [x] A overview of the refugee flow
+- [x] Incorporating specific routes of individuals with their stories.
+
+### Should have
+What should be added:
+- [x] A timeline to show the flow of refugees
+- [x] Showing the amounts of refugees gone to a country (bars)
+- [] Show multiple timelines/linecharts of individual countries for comparison
+- []
+
+### Nice to have
+What is nice to have:
+- [] ~~Showing the places where refugees have gone missing or died~~
+- [] Displaying news articles(link) to highlights of the specific time(Based on timeline/linechart)
 
 ## Data
 This visualisation uses the following datasets:
@@ -219,14 +241,16 @@ At the end a afterword will be given and a button to end the journey wil be disp
 
 *Each *stop* has a dot where you can hover over to easily check that part of the story again when you want to.*
 
-## Bugs
+## Knows Issues
+List of known issues
 
-## Goals?
+- No resizing. So a page refresh is needed. (Rec. to display on full screenwidth)
+- The mouseover stops at a certain point at the end of the graph and will not update further after that point.
+- (Report issues please)
 
 
 ## License
 GPL(3.0) - Kang Yun Wang (Kevin Wang)
-
 
 
 [unhcr]: http://popstats.unhcr.org/en/asylum_seekers_monthly
@@ -236,3 +260,4 @@ GPL(3.0) - Kang Yun Wang (Kevin Wang)
 [base-pj]: https://github.com/kyunwang/fe3-assessment-3
 
 [link-b]: https://github.com/kyunwang/their-journey/blob/master/b-doc.md
+[sketches-link]: https://drive.google.com/open?id=1DUOJDD0HnXnEJhnGppq0Ma0bFmsDk6dL
