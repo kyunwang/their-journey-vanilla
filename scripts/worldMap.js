@@ -474,7 +474,6 @@ var mapRefTip = d3.tip()
 mapCon.call(mapRefTip);
 
 function showRefTip(numb, date) {
-	console.log(numb);
 	mapRefTip.html(getRefHtml(numb, date)); // Set the content to be shown
 	mapRefTip.show();
 }

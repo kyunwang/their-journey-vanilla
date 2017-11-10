@@ -73,7 +73,8 @@ select {
 #filter-list {
   position: absolute;
   top: 2em;
-  right: 5.5em; }
+  right: 5.5em;
+  outline: none; }
 
 /*=================
 === Journey
@@ -225,34 +226,12 @@ select {
 /*=================
 === Multi timeline
 =================*/
-.multi-time-con {
-  height: 200px; }
-
-/*=================
-=== Stuff to check
-=================*/
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px; }
-
-.overlay {
-  fill: none;
-  pointer-events: all; }
-
-.focus circle {
-  fill: none;
-  stroke: steelblue; }
-
-.classy {
-  color: 'blue';
-  fill: "blue"; }
-
 /*=================
 === Loader
 =================*/
 #loader {
-  display: none;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: fixed;
@@ -262,6 +241,11 @@ select {
   background-color: var(--primary-color); }
   #loader p {
     text-align: center;
-    font-size: 2em; }
+    font-size: 2em;
+    margin: 0;
+    line-height: 2em; }
+    #loader p:first-of-type {
+      font-size: 2.5em;
+      font-weight: 700; }
 
 /*# sourceMappingURL=style.css.map */
