@@ -247,6 +247,7 @@ List of known issues
 - No resizing. So a page refresh is needed. (Rec. to display on full screenwidth)
 - The mouseover stops at a certain point at the end of the graph and will not update further after that point.
 - (Report issues please)
+- Not all undefined countries are filtered out yet
 
 
 ## License
