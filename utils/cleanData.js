@@ -19,7 +19,6 @@ function cleanRefugee(res) {
 		if (d[0] == d[1]) return; // It seems some orgin and destination are the same for some reason
 
 		if (toIgnore.includes(d[0]) || toIgnore.includes(d[1])) {
-			// console.log('incLUDES');
 			return;
 		}
 
@@ -29,10 +28,8 @@ function cleanRefugee(res) {
 			Datum: moment(`${d[2]}/${moment().month(d[3]).format('M')}`).format('YYYY/MM'),
 			Destination: getName(d[0]),
 			[keys[1]]: getName(d[1]),
-			// Destination: d[0],
-			// [keys[1]]: d[1],
 			[keys[2]]: d[2],
-			[keys[3]]: moment().month(d[3]).format('M'), // From string to number(string)
+			[keys[3]]: moment().month(d[3]).format('M'),
 			[keys[4]]: d[4],
 		};
 	}
@@ -48,21 +45,12 @@ function cleanTime(res) {
 		.key(function (d) { return d.Datum; })
 		.rollup(function (d) {
 			return {
-				// origin: d.Origin,
-				// destination: d.Destination,
 				total: d3.sum(d, function (item) {
 					return parseInt(item.Value, 10)
 				})
 			}
 		})
 		.entries(res)
-	// .map(function (d) {
-	// 	console.log(d);
-	// 	return {
-	// 		origin: d.Origin,
-	// 		destination: d.Destination,
-	// 	}
-	// })
 
 	time = time.sort(sortByDateAscending2);
 	return time;
@@ -84,14 +72,12 @@ function sortByDateAscending2(a, b) {
 // Inspired and based on this sh file: https://github.com/lucified/lucify-refugees/blob/155bb072d10a3f8459a88da8305aa77130ab7806/prepare.sh
 function cleanWorld(world) {
 	world.objects.countries.geometries = world.objects.countries.geometries.filter(data => {
-	// world.objects.countries.geometries.filter(data => {
-		// console.log(toInclude.includes(data.properties.ADM0_A3));
 		if (toInclude.includes(data.properties.ADM0_A3)) return true;
 		if (toIncConti.includes(data.properties.CONTINENT)) return true;
 		if (toIncRegio.includes(data.properties.REGION_WB)) return true;
 		if (toIncSubRegio.includes(data.properties.SUBREGION)) return true;
 		return false;
 	})
-	// console.log(world);
+
 	return world
 }
