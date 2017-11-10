@@ -247,6 +247,11 @@ function mapTraject(date) {
 
 // The journey/story function
 async function mapJourney(storyId) {
+
+	// Show our story nav buttons
+	d3.select('.story-buttons')
+		.classed('hide', false);
+
 	// Global checpoint in function to save the previous coordinates of the journey
 	var checkpoint;
 
@@ -488,6 +493,10 @@ function getRefHtml(n, d) {
 function resetAll() {
 	// Reset the journeyRoute		
 	journeyRoute = [];
+
+	// Hide the story buttons
+	d3.select('.story-buttons')
+		.classed('hide', true);
 
 	// Show the menu conent again
 	d3.select('.menu-list')

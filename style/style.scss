@@ -54,6 +54,9 @@ select {
 
 .hide {
 	display: none;
+	> * {
+		display: none;
+	}
 }
 
 

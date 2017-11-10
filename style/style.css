@@ -43,6 +43,8 @@ select {
 
 .hide {
   display: none; }
+  .hide > * {
+    display: none; }
 
 /*=================
 === Svg styling
