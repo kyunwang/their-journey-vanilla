@@ -37,7 +37,7 @@ var myLine = d3.line()
 
 
 // parsetime from: http://learnjsdata.com/time.html
-var parseTime = d3.timeParse('%Y/%m %I:%M%p');
+var parseTime = d3.timeParse('%Y/%m %I:%M%p'); // based on year month  hour:minutes AM/PM
 
 
 function renderTimeLine() {

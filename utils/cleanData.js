@@ -5,12 +5,13 @@ function cleanRefugee(res) {
 	res = res.slice(header);
 
 	const allData = d3.csvParseRows(res, map);
+	// Sort the data based on date
 	allData.sort(sortByDateAscending);
 	// console.log(allData);
 	return allData;
 
 	function map(d, i) {
-		// console.log(d);
+		// Return all the keys
 		if (i === 0) {
 			keys = d;
 			return;
@@ -18,11 +19,11 @@ function cleanRefugee(res) {
 
 		if (d[0] == d[1]) return; // It seems some orgin and destination are the same for some reason
 
+		// Ignore/remove the 'toignore' data
 		if (toIgnore.includes(d[0]) || toIgnore.includes(d[1])) {
 			return;
 		}
 
-		// console.log('origin', d[1]);
 
 		return {
 			Datum: moment(`${d[2]}/${moment().month(d[3]).format('M')}`).format('YYYY/MM'),
@@ -35,12 +36,13 @@ function cleanRefugee(res) {
 	}
 }
 
+// based on year month  hour:minutes AM/PM
 var parseTime = d3.timeParse('%Y/%m %I:%M%p');
 
 function cleanTime(res) {
 	// Nesting doc: http://bl.ocks.org/phoebebright/raw/3176159/
 
-	// console.log(res);
+	// return the data on date and total value
 	var time = d3.nest()
 		.key(function (d) { return d.Datum; })
 		.rollup(function (d) {
@@ -52,6 +54,7 @@ function cleanTime(res) {
 		})
 		.entries(res)
 
+	// Sort the data based on date
 	time = time.sort(sortByDateAscending2);
 	return time;
 }
@@ -71,6 +74,7 @@ function sortByDateAscending2(a, b) {
 
 // Inspired and based on this sh file: https://github.com/lucified/lucify-refugees/blob/155bb072d10a3f8459a88da8305aa77130ab7806/prepare.sh
 function cleanWorld(world) {
+	// Cleaning/filtering out all the unneeded countries
 	world.objects.countries.geometries = world.objects.countries.geometries.filter(data => {
 		if (toInclude.includes(data.properties.ADM0_A3)) return true;
 		if (toIncConti.includes(data.properties.CONTINENT)) return true;

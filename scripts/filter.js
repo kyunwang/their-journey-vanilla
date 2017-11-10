@@ -1,19 +1,19 @@
 
 
 function renderFilter() {
+	// Get all the keys/dates
 	var filterKeys = refugeeData.map(d => {
-		// console.log(d);
 		return d.Datum
 	})
 
 	// Remove duplicates
 	filterKeys = filterKeys.filter((d, i, self) => i === self.indexOf(d));
 
-	// filterKeys.unshift('all');
-	// filterKeys.unshift('None');
+	// Add a 'empty' rule to the dropdown
 	filterKeys.unshift('Select a date');
 
 
+	// Creating the options and assigning a function
 	d3.select('#filter-list')
 		.on('change', changeDate)
 		.selectAll('option')
@@ -35,6 +35,7 @@ function renderFilter() {
 			// Remove the bars as it does not update otherwise
 			// Well it actually layers itself but still
 
+		// Start the animation/transition
 		mapTraject(this.value);
 
 	}

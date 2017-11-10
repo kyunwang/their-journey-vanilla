@@ -26,7 +26,7 @@ projection
 	.center([0, la])
 	.rotate([-lo, 0])
 	.scale(winWidth * 0.7)
-	.translate([winWidth / 4, winHeight ]);
+	.translate([winWidth / 4, winHeight]);
 
 // Vars for zooming
 var mapZScale = 4;
@@ -41,14 +41,14 @@ var journeyRoute = [];
 =================*/
 
 d3.selectAll('.menu-list li')
-	.on('click', function() {
+	.on('click', function () {
 		if (this.classList.contains('disabled')) return;
 		mapJourney(this.dataset.storyId); // Start story based on id
 	});
 
 // End the story
 d3.select('#story-end')
-	.on('click', function() {
+	.on('click', function () {
 		// Hide the reset button
 		d3.select(this)
 			.style('display', 'none');
@@ -66,7 +66,7 @@ function loadMap(err, res) {
 
 	var topoPath = topojson.feature(res, res.objects.countries).features;
 
-	// Get center of countries and directions
+	// Get center of countries and directions pairing
 	topoPath.map(item => {
 		directionMapping = [
 			...directionMapping,
@@ -79,6 +79,7 @@ function loadMap(err, res) {
 
 
 		// Quick fix for center of few countries (prototype)
+		// From contants.js
 		if (correctCenter[item.properties.ADM0_A3]) {
 			var adm0 = correctCenter[item.properties.ADM0_A3]
 
@@ -106,11 +107,12 @@ function loadMap(err, res) {
 		.on('mouseenter', handleCountryEnter)
 		.on('mouseleave', handleCountryLeave)
 
+	// Handling the mouse events to show the country name
 	function handleCountryEnter(d) {
 		var cName = d.properties.NAME;
-		var cNameC = d.properties.ADM0_A3;		
+		var cNameC = d.properties.ADM0_A3;
 		// console.log(cName);
-		
+
 		world.append('text')
 			.text(cName)
 			.attr('class', `${cNameC} country-adm`)
@@ -118,14 +120,10 @@ function loadMap(err, res) {
 			.attr('y', d => getCenterY(cName))
 			.attr('dy', 2)
 			.attr('text-anchor', 'middle')
-		// .attr('font-size', 20)
-			// .attr('fill', '#000')
 	}
 
 	function handleCountryLeave(d) {
 		var cNameC = d.properties.ADM0_A3;
-		// console.log(cNameC);
-		// console.log(cName);
 		world.select(`.${cNameC}`)
 			.remove();
 	}
@@ -155,12 +153,12 @@ function centerPoints(data) {
 
 // Showing the route of refugees.
 function mapTraject(date) {
-	resetAll();
-	if (date == 'Select a date') return;
+	resetAll(); // Reset everything first
+	if (date == 'Select a date') return; // Don't do anything if we select a unvalid entry
 
-	// Filter the data
-	// var filterData = (date !== 'all' && date !== undefined) ? refugeeData.filter(d => d.Datum === date) : refugeeData;
+	// Filter the data based on selection
 	var filterData = refugeeData.filter(d => d.Datum === date);
+	// var filterData = (date !== 'all' && date !== undefined) ? refugeeData.filter(d => d.Datum === date) : refugeeData;
 	// var filterData = refugeeData;
 
 
@@ -175,90 +173,88 @@ function mapTraject(date) {
 		.selectAll('line')
 		.data(filterData);
 
-		routeTraject.enter()
-			.append('line')
-			.attr('class', 'trajectory')
-			// Assign starting point
-			.attr('x1', d => {
-				// console.log((d.Origin));
-				// console.log(d.Origin, getCenterX(d.Origin));
-				return getCenterX(d.Origin)
-			})
-			.attr('y1', d => getCenterY(d.Origin))
-			.attr('x2', d => getCenterX(d.Origin))
-			.attr('y2', d => getCenterY(d.Origin))
-			.transition()
-			.duration(transDurShort)
-			.delay((d, i) => seqDelayShort(i))
-			// Transition to desitnation
-			.attr('x2', d => getCenterX(d.Destination))
-			.attr('y2', d => getCenterY(d.Destination))
-			.transition()
-			.duration(transDurShort)
-			// End line at desitnation
-			.attr('x1', d => getCenterX(d.Destination))
-			.attr('y1', d => getCenterY(d.Destination))
+	routeTraject.enter()
+		.append('line')
+		.attr('class', 'trajectory')
+		// Assign starting point
+		.attr('x1', d => {
+			// console.log((d.Origin));
+			// console.log(d.Origin, getCenterX(d.Origin));
+			return getCenterX(d.Origin)
+		})
+		.attr('y1', d => getCenterY(d.Origin))
+		.attr('x2', d => getCenterX(d.Origin))
+		.attr('y2', d => getCenterY(d.Origin))
+		.transition()
+		.duration(transDurShort)
+		.delay((d, i) => seqDelayShort(i))
+		// Transition to desitnation
+		.attr('x2', d => getCenterX(d.Destination))
+		.attr('y2', d => getCenterY(d.Destination))
+		.transition()
+		.duration(transDurShort)
+		// End line at desitnation
+		.attr('x1', d => getCenterX(d.Destination))
+		.attr('y1', d => getCenterY(d.Destination))
+
+	
+	// Container for the bars(barcharting)
+	var routeBar = mapCon.append('g')
+		.attr('class', 'refbar-con')
+		.selectAll('rect')
+		.data(filterData)
 
 
-		var routeBar = mapCon.append('g')
-			.attr('class', 'refbar-con')
-			// .on('mouseenter', () => showRefTip(totalValue, date)) // Call on g to select whole area
-			.selectAll('rect')
-			.data(filterData)
+	routeBar.enter()
+		.append('rect')
+		// Show a tooltip with the amount of refugees in said country
+		.on('mouseenter', (d) => showRefTip(getCountryTotal(d.Destination), date))
+		.on('mouseleave', hideRefTip)
+
+		.attr('class', 'refugee-bar')
+		.attr('x', d => getCenterX(d.Destination) - 5)
+		.attr('y', d => getCenterY(d.Destination))
+		.attr('height', 0)
+		.attr('width', 10)
+		.transition()
+		.duration(transDur)
+		.delay((d, i) => seqDelayShort(i))
+		// .attr('height', d => refbarHeight(d.Value))
+		.attr('height', d => refbarHeight(getCountryTotal(d.Destination)))
+		.attr('y', function (d) {
+			// return getCenterY(d.Destination) - refbarHeight(d.Value);
+			// console.log(getCountryTotal(d.Destination));
+			return getCenterY(d.Destination) - refbarHeight(getCountryTotal(d.Destination));
+		})
 
 
+	function getCountryTotal(dest) {
+		// Heavy
 
-		routeBar.enter()
-			.append('rect')
-			.on('mouseenter', (d) => showRefTip(getCountryTotal(d.Destination), date))
-			.on('mouseleave', hideRefTip)
-			
-			.attr('class', 'refugee-bar')
-			.attr('x', d => getCenterX(d.Destination) - 5)
-			.attr('y', d => getCenterY(d.Destination))
-			.attr('height', 0)
-			.attr('width', 10)
-			.transition()
-			.duration(transDur)
-			.delay((d, i) => seqDelayShort(i))
-			// .attr('height', d => refbarHeight(d.Value))
-			.attr('height', d => refbarHeight(getCountryTotal(d.Destination)))
-			.attr('y', function (d) {
-				// return getCenterY(d.Destination) - refbarHeight(d.Value);
-				// console.log(getCountryTotal(d.Destination));
-				return getCenterY(d.Destination) - refbarHeight(getCountryTotal(d.Destination));
-			})
+		// get the correct data from country
+		var singleCountry = filterData.filter(d => d.Destination == dest);
 
-		// routeBar.selectAll('rect').attr('fill','blue')
-		routeBar.attr('fill', 'blue')
-		// routeBar.exit().remove
-
-
-		function getCountryTotal(dest) {
-			// return 10
-			var singleCountry = filterData.filter(d => d.Destination == dest);
-
-			return singleCountry.reduce((a, b) => {
-				if (a.Destination == dest || b.Destination == dest) {
-					a = a.Value ? a.Value : a;
-					return (setNumber(a) + setNumber(b.Value));
-				}
-			})
-				// if (!a) return b.Value;
-		}
+		// Return the sum of the data
+		return singleCountry.reduce((a, b) => {
+			if (a.Destination == dest || b.Destination == dest) {
+				a = a.Value ? a.Value : a;
+				return (setNumber(a) + setNumber(b.Value));
+			}
+		})
+	}
 
 }
 
 // The journey/story function
 async function mapJourney(storyId) {
+	// Global checpoint in function to save the previous coordinates of the journey
 	var checkpoint;
-	// console.log(journeyData[storyId].journeyCoords);
+
+	// Assign the country coordinates from the journey if they do not exist yet
 	if (journeyData[storyId].journeyCoords.length === 0) {
 		journeyData.map(data => {
 			data.journey.map((country, i) => {
 				journeyData[storyId].journeyCoords.push(countryCenter[country]);
-				// journeyRoute.push(countryCenter[country]);
-				// console.log(country);
 			})
 		})
 	}
@@ -279,10 +275,10 @@ async function mapJourney(storyId) {
 		.datum(journeyRoute)
 		.attr('class', 'journey-line')
 		.attr('d', pathLine(journeyRoute))
-		// .attr('d', pathLine(journeyData[storyId].journeyCoords))
 		.transition()
 		.duration(transDur)
 		.attrTween('stroke-dasharray', function (d) { // Tween source: https://www.yerich.net/blog/bezier-curve-animation-using-d3
+			// Using the string length to animate the route of the refugee
 			var len = journeyMap.node().getTotalLength();
 			return function (t) {
 				checkpoint = len;
@@ -292,14 +288,14 @@ async function mapJourney(storyId) {
 
 
 	// Add function for handleing the advent of the journey
-	d3.select('#plus').on('click', addJourneyRoute);
-	d3.select('#minus').on('click', removeJourneyRoute);
+	d3.select('#s-advance').on('click', addJourneyRoute);
+	d3.select('#s-back').on('click', removeJourneyRoute);
 
-	
+
 	var journeyDestinations = mapCon.append('g')
-	.attr('class', 'spots-con')
-	
-	
+		.attr('class', 'spots-con')
+
+
 	// Start the journey on select story
 	// After all previous data/vars have loaded
 	addJourneyRoute();
@@ -310,7 +306,7 @@ async function mapJourney(storyId) {
 		var updateJourney = journeyDestinations
 			.selectAll('.spots-stop')
 			.data(journeyRoute)
-			
+
 
 		updateJourney
 			.enter()
@@ -322,28 +318,25 @@ async function mapJourney(storyId) {
 				showStory(journeyData[storyId].story[i]);
 			})
 			// .on('mouseleave', hideStoryTip)
-				.attr('class', 'spots-stop')
-				.attr('r', 0)
-				.attr('cx', d => projection(d)[0])
-				.attr('cy', d => projection(d)[1])
-				.attr('fill', '#f3f3f3')
-				.transition()
-				.duration(transDur)			
-				.attr('r', 5)
-				// .attr('transform', `translate(${-point[0] * 2}, ${-point[1] * 2}) scale(${3})`) // To increase the dot size
-				.attr('transform', () => zoomPoint(point, routeItem))
-				
-				
+			.attr('class', 'spots-stop')
+			.attr('r', 0)
+			.attr('cx', d => projection(d)[0])
+			.attr('cy', d => projection(d)[1])
+			.attr('fill', '#f3f3f3')
+			.transition()
+			.duration(transDur)
+			.attr('r', 5)
+			// Scale to the point of journey
+			.attr('transform', () => zoomPoint(point, routeItem))
+
 
 		// Update / scale the map to keep the dots in the correct position
 		updateJourney
 			.transition()
-			.duration(transDur)	
+			.duration(transDur)
 			.attr('transform', () => zoomPoint(point, routeItem))
-			// .attr('fill', '#fff')
 			.attr('fill', '#3b3b3b')
 			.attr('stroke', '#f3f3f3')
-			// .on('mouseenter', () => this.style('fill', 'blue'))
 
 
 		// Removing the dots
@@ -369,15 +362,12 @@ async function mapJourney(storyId) {
 		if (journeyRoute.length < jCoords.length) {
 			// Get safe the current length 
 			checkpoint = journeyMap.node().getTotalLength();
-			
+
 			// Add new route/data
 			journeyRoute.push(jCoords[journeyRoute.length]);
-			
+
 			var routeItem = journeyRoute[journeyRoute.length - 1];
 			var point = projection(routeItem);
-			// if (journeyRoute.length > 3) {
-				// 	journeyRoute.shift()
-			// }
 
 			// Updating
 			d3.select(journeyMap.node())
@@ -392,29 +382,29 @@ async function mapJourney(storyId) {
 					};
 				})
 
+			// Will set the dots/stops of each step
 			updateHotspot(point, routeItem);
-			zoomWorld(point, routeItem);
-			showStory(journeyData[storyId].story[journeyRoute.length - 1])
 
-			// Need another check when new data and different data comes in 
+			// Zooms in to the point we want to
+			zoomWorld(point, routeItem);
+
+			// Get the correct data/storycontent to show
+			showStory(journeyData[storyId].story[journeyRoute.length - 1]);
 
 		} else {
 			// Zoom out again for an overview
 			d3.select(journeyMap.node())
-				// .attr('d', pathLine(journeyRoute))
 				.transition()
 				.duration(transDur)
 				.attr('transform', () => zoomPoint())
-				// .attrTween('stroke-dasharray', function (d) {
-				// 	var len = journeyMap.node().getTotalLength();
-				// 	return function (t) {
-				// 		return (d3.interpolateString(`${checkpoint}, ${len}`, `${len}, 0`))(t);
-				// 	};
-				// })
 
-
+			// Update the hotspot and zoom out
 			updateHotspot();
-			zoomWorld(); // and zoom out lines and hotspots
+
+ 			// Zoom out lines and hotspots
+			zoomWorld();
+
+			// Show afterword of the story
 			showStory(journeyData[storyId].story[journeyRoute.length], true)
 		}
 	}
@@ -441,7 +431,7 @@ async function mapJourney(storyId) {
 				.attr('d', pathLine(journeyRoute))
 				.transition()
 				.duration(transDur)
-				.attr('transform', () => zoomPoint(point, routeItem))				
+				.attr('transform', () => zoomPoint(point, routeItem))
 				.attrTween('stroke-dasharray', function (d) {
 					var len = journeyMap.node().getTotalLength();
 					return function (t) {
@@ -471,6 +461,7 @@ var mapRefTip = d3.tip()
 	.attr('class', 'refugee-bar-tip')
 	.offset([-10, 0]);
 
+// Bind/assign tto mapcon
 mapCon.call(mapRefTip);
 
 function showRefTip(numb, date) {
@@ -525,7 +516,7 @@ function showStory(story, end) {
 
 	d3.select('.story-content')
 		.html(story)
-	
+
 	d3.select('.menu-list')
 		.classed('hide', true);
 }
@@ -537,18 +528,20 @@ function zoomWorld(point, location) {
 	var strokeW = location ? 1 : 2.5;
 	// var fontSize = location ? 6 : 20;
 
+	// Container with transition
 	var transitionWorld = world.transition()
 		.duration(transDur);
 
+	// Zoom the world and transition
 	transitionWorld
 		.attr('transform', () => zoomPoint(point, location))
 		.selectAll('.country')
 		.style('stroke-width', strokeW)
-		
+
 	// transitionWorld
 	// 	.selectAll('.country-adm')
 	// 	.style('font-size', 1)
-		// .attr('font-size', fontSize)
+	// .attr('font-size', fontSize)
 }
 
 // Inspired from https://stackoverflow.com/questions/20409484/d3-js-zoomto-point-in-a-2d-map-projection
@@ -556,7 +549,7 @@ function zoomPoint(point, item) {
 	if (item) { // Zoom & scale to
 		return `translate(${-point[0] * scaleMulti}, ${-point[1] * scaleMulti}) scale(${mapZScale})`
 	}
-	return ''; // Remove zoom
+	return ''; // Remove zoom /return 
 }
 
 /*=================

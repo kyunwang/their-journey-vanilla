@@ -91,13 +91,13 @@ function getName(country) {
 }
 
 
-
+// Countries to ignore/remove from our refugee data
 var toIgnore = [
 	'Canada', 'Australia', 'New Zealand', 'Japan', 'Rep. of Korea', 'Turkey',
 	'Stateless', 'Various/unknown', 'Tibetan', 'USA (EOIR)', 'USA (INS/DHS)', "Dem. People's Rep. of Korea", 'Viet Nam', 'Jamaica', 'Chile', 'Brazil', 'Colombia', 'Cuba', 'United States of America', 'Honduras', 'El Salvador', 'Mexico', 'Dominican Rep.', 'Venezuela', 'Guatemala', 'Solomon Islands', 'Peru', 'Lao', 'Sao Tome and Principe', 'Ecuador', 'Argentina', 'Bahamas', 'Serbia and Kosovo: S/RES/1244 (1999)'
  ]
 
-
+// Things to include in our topojson
 var toInclude = [
 	'SYR', 'AFG', 'SRB', 'IRQ', 'ALB', 'ERI', 'PAK', 'SOM', 'CHI', 'UKR', 'TUR', 'CYP', 'PSE'
 ];
