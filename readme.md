@@ -1,14 +1,23 @@
-* Includes documentation about part B
-- see /.... file for b
+*To [B Documentation][link-b]*
 
 # Their Journey
-A visualisation about refugees in the area of Europe.
+**A proof of concept**
+
+A visualisation about refugees in the area of Europe and around.
 Follow a journey of a refugee too while your are at it.
+
+Partly based on [own project][base-pj]
+
+*All the code sources used in the code are in the files themselves as comments right next to the code.*
 
 [Attempt using React.js with D3.js][react-v]
 
-Partly based on [own project][base-pj]
-*All the code sources used in the code are in the files themselves as comments right next to the code.*
+**Tools used**
+The tools used:
+- D3.js
+- D3-tip.js
+- Topojson.js
+- Moment.js
 
 # TOC
 - [Concept](#concept)
@@ -18,33 +27,23 @@ Partly based on [own project][base-pj]
 - [Bugs](#bugs)
 - [License](#license)
 
-
-# Proof of Concept
-# Their-Journey in Vanilla JS
-Intro
-
-linechart: https://bl.ocks.org/mbostock/3884955
-
-
 ## Concept
+The goal of this visualisation is to give the user a overview of the refugee flow in and around Europe. By showing the traject of their starting point(country of origin) to their destination(country of destination) the user can get a rough spacial overview of of the (minimal) absolute distance the refugee has to cross.
 
-## Tools
-
-D3.js
-D3-tip.js
-Topojson.js
-Moment.js
+By giving showing hard numbers of the amount of refugees fled over time. One can get a rough understanding of how many people are fleeing for their lives.
 
 ## Data
-This visualisation uses the following data:
+This visualisation uses the following datasets:
+
 - **Asylum Seekers Monthly from [UNHCR][unhcr]**
+
 Considering the size of the file we will be using the data from 2012 to and with 2016.
 
 The dataset contains the following information:
-	- Month and Year of arrival
-	- Origin country of the refugee
-	- Destination country of the refugee
-	- The amount of refugees
+- Month and Year of arrival
+- Origin country of the refugee
+- Destination country of the refugee
+- The amount of refugees
 
 - **Journey data of refugee(s) from [BBC][bbc-story]**
 The data/content comes from BBC. The file is created by hand.
@@ -235,3 +234,5 @@ GPL(3.0) - Kang Yun Wang (Kevin Wang)
 
 [react-v]: https://github.com/kyunwang/their-journey
 [base-pj]: https://github.com/kyunwang/fe3-assessment-3
+
+[link-b]: https://github.com/kyunwang/their-journey/blob/master/b-doc.md
