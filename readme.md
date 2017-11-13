@@ -260,5 +260,5 @@ GPL(3.0) - Kang Yun Wang (Kevin Wang)
 [react-v]: https://github.com/kyunwang/their-journey
 [base-pj]: https://github.com/kyunwang/fe3-assessment-3
 
-[link-b]: https://github.com/kyunwang/their-journey/blob/master/b-doc.md
+[link-b]: https://github.com/kyunwang/their-journey-vanilla/blob/master/b-doc.md
 [sketches-link]: https://drive.google.com/open?id=1DUOJDD0HnXnEJhnGppq0Ma0bFmsDk6dL
