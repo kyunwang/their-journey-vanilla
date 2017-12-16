@@ -18,6 +18,8 @@ Partly based on [own project][base-pj]
 - Topojson.js
 - Moment.js
 
+*Data set to 2012 only because of loadtime*
+
 # TOC
 - [Concept](#concept)
 - [Roadmap](#roadmap)
